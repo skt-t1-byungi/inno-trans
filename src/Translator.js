@@ -60,14 +60,22 @@ export default class Translator {
   }
 
   trans (key, data = null) {
-    return this._repository
-      .getMessageWithFallback([this._locale, ...this._fallbacks], key)
-      .trans(this._tagged, data)
+    const message = this._repository.getMessageWithFallback([this._locale, ...this._fallbacks], key)
+
+    if (!message) {
+      return key
+    }
+
+    return message.trans(this._tagged, data)
   }
 
   transChoice (key, number, data = null) {
-    return this._repository
-      .getMessageWithFallback([this._locale, ...this._fallbacks], key)
-      .transChoice(number, this._tagged, data)
+    const message = this._repository.getMessageWithFallback([this._locale, ...this._fallbacks], key)
+
+    if (!message) {
+      return key
+    }
+
+    return message.transChoice(number, this._tagged, data)
   }
 }
