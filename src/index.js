@@ -4,8 +4,8 @@ import Translator from './Translator'
 export default function trans (
   {
     message = {},
+    fallback = [],
     locale,
-    fallback,
     tag
   } = {}
 ) {
@@ -15,15 +15,8 @@ export default function trans (
     translator.message(locale, message[locale])
   }
 
-  if (locale) {
-    translator.locale(locale)
-  }
-
-  if (fallback) {
-    translator.fallback(fallback)
-  }
-
-  translator.tag(tag || ['{', '}'])
-
   return translator
+    .locale(locale)
+    .fallback(fallback)
+    .tag(tag || ['{', '}'])
 }

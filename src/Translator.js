@@ -4,8 +4,10 @@ export default class Translator {
    */
   constructor (repository) {
     this._repository = repository
+
+    // these values must be initialized by the setter method.
+    this._fallbacks = []
     this._locale = null
-    this._fallbacks = null
     this._tagged = null
   }
 
