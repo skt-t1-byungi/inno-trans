@@ -1,0 +1,32 @@
+{
+  "name": "inno-trans",
+  "version": "0.0.1",
+  "main": "src/index.js",
+  "author": {
+    "name": "skt-t1-byungi",
+    "email": "tiniwz@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/skt-t1-byungi/inno-trans.git"
+  },
+  "license": "MIT",
+  "scripts": {
+    "test": "ava",
+    "dev": "ava -w"
+  },
+  "devDependencies": {
+    "@std/esm": "^0.19.0",
+    "ava": "^0.24.0",
+    "eslint": "^4.14.0",
+    "eslint-config-standard": "^11.0.0-beta.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1"
+  },
+  "ava": {
+    "require": ["@std/esm"]
+  },
+  "@std/esm": "cjs"
+}
