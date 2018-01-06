@@ -6,10 +6,8 @@ class Parser {
   parse () {
     const texts = this._splitUsingDelimiter()
 
-    const plural = texts.length === 1 ? []
+    return texts.length === 1 ? []
       : texts.map((...args) => this._parseSplitedText(...args))
-
-    return {value: this._text, plural}
   }
 
   _splitUsingDelimiter () {

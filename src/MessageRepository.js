@@ -23,6 +23,11 @@ export default class MessageRepository {
     return this._repository.hasOwnProperty(locale)
   }
 
+  /**
+   * @param {string[]} locales
+   * @param {string} key
+   * @returns {Message|null}
+   */
   getMessageWithFallback (locales, key) {
     for (const locale of locales) {
       const messages = this._repository[locale]

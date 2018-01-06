@@ -16,7 +16,7 @@ export default class Message {
   }
 
   transChoice (number, tagged, data = null) {
-    const plural = this.parsing.plural
+    const plural = this.parsing
       .find(({min, max}) => number <= max && number >= min)
 
     const text = plural ? plural.value : this._text

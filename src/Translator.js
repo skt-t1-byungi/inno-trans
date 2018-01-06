@@ -1,15 +1,12 @@
 export default class Translator {
   /**
    * @param {MessageRepository} repository
-   * @param {string} locale
-   * @param {string[]} fallbacks
-   * @param {[string, string]} tagged
    */
-  constructor (repository, locale, fallbacks = [], tagged = []) {
+  constructor (repository) {
     this._repository = repository
-    this._locale = locale
-    this._fallbacks = fallbacks
-    this._tagged = tagged
+    this._locale = null
+    this._fallbacks = null
+    this._tagged = null
   }
 
   message (local, texts = {}) {
