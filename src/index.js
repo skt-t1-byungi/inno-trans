@@ -3,10 +3,10 @@ import Translator from './Translator'
 
 export default function trans (
   {
+    locale,
     message = {},
     fallback = [],
-    locale,
-    tag
+    tag = ['{', '}']
   } = {}
 ) {
   const translator = new Translator(new MessageRepository())
@@ -18,5 +18,5 @@ export default function trans (
   return translator
     .locale(locale)
     .fallback(fallback)
-    .tag(tag || ['{', '}'])
+    .tag(tag)
 }

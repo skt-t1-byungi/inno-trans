@@ -1,3 +1,5 @@
+import replace from './replace'
+
 export default class Translator {
   /**
    * @param {MessageRepository} repository
@@ -5,10 +7,15 @@ export default class Translator {
   constructor (repository) {
     this._repository = repository
 
-    // these values must be initialized by the setter method.
+    // these props must be initialized by setter method.
     this._fallbacks = []
+    this._filters = []
     this._locale = null
     this._tagged = null
+
+    this.trans = this.trans.bind(this)
+    this.transChoice = this.transChoice.bind(this)
+    this._fetchValuesFilter = this._fetchValuesFilter.bind(this)
   }
 
   message (local, texts = {}) {
@@ -19,10 +26,19 @@ export default class Translator {
 
   locale (locale) {
     if (!this._repository.hasLocale(locale)) {
-      throw new TypeError(`There are no messages for "${locale}".`)
+      throw new TypeError(`"${locale}" messages have not been added.`)
     }
 
     this._locale = locale
+
+    return this
+  }
+
+  /**
+   * @param {function|function[]} filters
+   */
+  filter (filters) {
+    this._filters.push(...filters)
 
     return this
   }
@@ -37,7 +53,7 @@ export default class Translator {
 
     for (const fallback of fallbacks) {
       if (!this._repository.hasLocale(fallback)) {
-        throw new TypeError(`There are no messages for "${fallback}".`)
+        throw new TypeError(`"${fallback}" messages have not been added.`)
       }
 
       if (this._fallbacks.indexOf(fallback) === -1) {
@@ -58,23 +74,38 @@ export default class Translator {
     return this
   }
 
-  trans (key, data = null) {
-    const message = this._repository.getMessageWithFallback([this._locale, ...this._fallbacks], key)
-
-    if (!message) {
-      return key
+  trans (key, values = {}, locale = null) {
+    if (locale & !this._repository.hasLocale(locale)) {
+      throw new TypeError(`"${locale}" messages have not been added.`)
     }
 
-    return message.trans(this._tagged, data)
+    const message = this._getMessageOrNull(key, locale || this._locale)
+
+    return message ? this._applyFilters(message.template(), { ...values }) : key
   }
 
-  transChoice (key, number, data = null) {
-    const message = this._repository.getMessageWithFallback([this._locale, ...this._fallbacks], key)
+  _getMessageOrNull (key, locale) {
+    const locales = [locale, ...this._fallbacks]
 
-    if (!message) {
-      return key
+    return this._repository.findMessageWithFallback(locales, key)
+  }
+
+  _applyFilters (template, values) {
+    return [...this._filters, this._fetchValuesFilter]
+      .reduce((template, filter) => filter(template, values, this._locale), template)
+  }
+
+  _fetchValuesFilter (message, values) {
+    return replace(message, values, this._tagged)
+  }
+
+  transChoice (key, number, values = {}, locale = null) {
+    if (locale & !this._repository.hasLocale(locale)) {
+      throw new TypeError(`"${locale}" messages have not been added.`)
     }
 
-    return message.transChoice(number, this._tagged, data)
+    const message = this._getMessageOrNull(key, locale || this._locale)
+
+    return message ? this._applyFilter(message.choiceTemplate(), {...values}) : key
   }
 }

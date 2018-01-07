@@ -12,7 +12,7 @@ export default class MessageRepository {
       const text = texts[key].toString ? texts[key].toString() : texts[key]
 
       if (typeof text !== 'string') {
-        throw new TypeError(`This "${locale}.${key}" message is not of string.`)
+        throw new TypeError(`This "${locale}.${key}" message is not a string type.`)
       }
 
       messages[key] = new Message(text)
@@ -28,7 +28,7 @@ export default class MessageRepository {
    * @param {string} key
    * @returns {Message|null}
    */
-  getMessageWithFallback (locales, key) {
+  findMessageWithFallback (locales, key) {
     for (const locale of locales) {
       const messages = this._repository[locale]
 
