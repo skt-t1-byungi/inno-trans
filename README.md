@@ -103,9 +103,10 @@ output
 ~~hello!~~
 ```
 
-### possible to load lazily.
-```
-lang.message('en', addMessages)
+### possible to load lazily
+```js
+lang
+  .message('en', addMessages)
   .filter([filter1, filter2])
   .fallback(['ko', 'jp'])
 ```
