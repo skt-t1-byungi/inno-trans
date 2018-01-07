@@ -1,6 +1,9 @@
 # inno-trans
 > 📜 simple localization library (inspired by laravel translation)
 
+[![npm](https://img.shields.io/npm/v/inno-trans.svg?style=flat-square)](https://www.npmjs.com/package/inno-trans)
+[![npm](https://img.shields.io/npm/dt/inno-trans.svg?style=flat-square)](https://www.npmjs.com/package/inno-trans)
+
 ## Install
 ```sh
 yarn add inno-trans
