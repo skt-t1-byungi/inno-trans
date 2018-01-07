@@ -6,9 +6,14 @@ export default function trans (
     locale,
     message = {},
     fallback = [],
-    tag = ['{', '}']
+    tag = ['{', '}'],
+    filter = []
   } = {}
 ) {
+  if (!locale) {
+    throw new TypeError('The "locale" option is required.')
+  }
+
   const translator = new Translator(new MessageRepository())
 
   for (const locale in message) {
@@ -19,4 +24,5 @@ export default function trans (
     .locale(locale)
     .fallback(fallback)
     .tag(tag)
+    .filter(filter)
 }

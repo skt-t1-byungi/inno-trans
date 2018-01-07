@@ -10,14 +10,18 @@ export default class Message {
     return this._parsed || (this._parsed = parse(this._text))
   }
 
-  template () {
+  get template () {
     return this._text
   }
 
-  choiceTemplate (number) {
+  /**
+   * @param {number} number
+   * @returns {string|null}
+   */
+  findPluralTemplate (number) {
     const plural = this.parsed
       .find(({min, max}) => number <= max && number >= min)
 
-    return plural ? plural.value : this._text
+    return plural ? plural.value : null
   }
 }
