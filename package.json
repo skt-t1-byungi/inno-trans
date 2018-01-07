@@ -1,6 +1,6 @@
 {
   "name": "inno-trans",
-  "version": "1.0.0",
+  "version": "1.0.0-1",
   "main": "dist/inno-trans.cjs.js",
   "module": "dist/inno-trans.m.js",
   "unpkg": "dist/inno-trans.min.js",
