@@ -13,7 +13,14 @@ yarn add inno-trans
 import trans from "inno-trans";
 
 //commonjs
-var trans = require('inno-trans');
+const trans = require('inno-trans');
+```
+### browser
+```html
+<script src="https://unpkg.com/inno-trans"></script>
+<script>
+ var trans = InnoTrans;
+</script>
 ```
 
 ## Example
