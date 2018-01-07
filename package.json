@@ -1,6 +1,6 @@
 {
   "name": "inno-trans",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "main": "dist/inno-trans.cjs.js",
   "module": "dist/inno-trans.m.js",
   "unpkg": "dist/inno-trans.min.js",
@@ -30,7 +30,7 @@
     "build": "bili --format cjs,es,umd-min --name inno-trans --module-name InnoTrans --banner",
     "test": "ava",
     "dev": "ava -w",
-    "prepublish": "npm run build"
+    "prepublish": "npm test | npm run build"
   },
   "devDependencies": {
     "@std/esm": "^0.19.0",
