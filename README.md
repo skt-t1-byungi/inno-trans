@@ -29,21 +29,41 @@ const trans = require('inno-trans');
 const lang = trans({
   locale: 'en',
   message: {
-    en: { 'hello': '{name}, hello!' }
+    en: { 'hello': 'hello~!' }
   }
 })
 
-> lang.trans('hello', {name: "byungi"})
+> lang.trans('hello')
 ```
 output
 ```
-byungi, hello!
+hello~!
+```
+
+### Support variable
+```js
+...
+message: { en: { 'hello': '{name}, hello~!' } }
+...
+
+> lang.trans('hello', {name: 'byungi'})
+```
+output
+```
+byungi, hello~!
+```
+
+#### Change tag
+```js
+  tag: ['<%=', '%>'],
+  message: { en: { 'hello': '<%=name%>, hello~!' } }
+
 ```
 
 ### Pluralization
 ```js
 ...
-messages: { en: { apples: 'one apple|many apples' } }
+message: { en: { apples: 'one apple|many apples' } }
 ...
 
 > lang.transChoice('apples', 1)
@@ -58,7 +78,7 @@ many apples
 ### Complex pluralization
 ```js
 ...
-messages: { en: { apples : '{0}none|[1,19]some|[20,*]many' } }
+message: { en: { apples : '{0}none|[1,19]some|[20,*]many' } }
 ...
 
 > lang.transChoice('apples', 0)
@@ -119,6 +139,7 @@ lang
   .message('en', addMessages)
   .filter([filter1, filter2])
   .fallback(['ko', 'jp'])
+  .tag(['<%=', '%>'])
 ```
 
 ## License
