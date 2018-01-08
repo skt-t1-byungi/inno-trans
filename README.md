@@ -112,15 +112,15 @@ hello!
 👌
 ```
 
-### Support Filter
+### Support Formatter
 ```js
-const customFilter = (message, values, locale, tag) =>{
+const customFormatter = (message, values, locale, tag) =>{
   return '~~' + message + '~~'
 }
 
 const lang = trans({
   locale: 'en',
-  filter: [customFilter],
+  formatter: [customFormatter],
   message: {
     en: { 'hello': 'hello!' },
   }
@@ -133,10 +133,10 @@ output
 ~~hello!~~
 ```
 
-### possible to load lazily
+### Possible to load lazily
 ```js
 lang
-  .message('en', addMessages)
+  .message('en', {apple : 'an apple|apples'})
   .filter([filter1, filter2])
   .fallback(['ko', 'jp'])
   .tag(['<%=', '%>'])

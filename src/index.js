@@ -7,7 +7,7 @@ export default function trans (
     message = {},
     fallback = [],
     tag = ['{', '}'],
-    filter = []
+    formatter = []
   } = {}
 ) {
   if (!locale) {
@@ -24,5 +24,5 @@ export default function trans (
     .locale(locale)
     .fallback(fallback)
     .tag(tag)
-    .filter(filter)
+    .formatter(formatter)
 }

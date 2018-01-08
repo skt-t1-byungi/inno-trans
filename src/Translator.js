@@ -1,4 +1,4 @@
-import { fetchValuesFilter } from './filters'
+import { fetchValuesFormatter } from './formatter'
 
 export default class Translator {
   /**
@@ -12,7 +12,7 @@ export default class Translator {
     this._tag = null
 
     this._fallbacks = []
-    this._filters = []
+    this._formatters = []
   }
 
   message (local, texts = {}) {
@@ -32,14 +32,14 @@ export default class Translator {
   }
 
   /**
-   * @param {function|function[]} filters
+   * @param {function|function[]} formatters
    */
-  filter (filters) {
-    if (typeof filters === 'function') {
-      filters = [filters]
+  formatter (formatters) {
+    if (typeof formatters === 'function') {
+      formatters = [formatters]
     }
 
-    this._filters.push(...filters)
+    this._formatters.push(...formatters)
 
     return this
   }
@@ -80,7 +80,7 @@ export default class Translator {
 
     const message = this._findMessage(key, locale)
 
-    return message ? this._applyFilters(message.template, { ...values }, locale) : key
+    return message ? this._applyFormatters(message.template, { ...values }, locale) : key
   }
 
   _normalizeLocale (locale) {
@@ -101,10 +101,10 @@ export default class Translator {
     return this._repository.findMessageWithFallback(locales, key)
   }
 
-  _applyFilters (template, values, locale) {
-    const filters = [ ...this._filters, fetchValuesFilter ]
+  _applyFormatters (template, values, locale) {
+    const formatters = [ ...this._formatters, fetchValuesFormatter ]
 
-    return filters.reduce((template, filter) => filter(template, values, locale, this._tag), template)
+    return formatters.reduce((template, formatter) => formatter(template, values, locale, this._tag), template)
   }
 
   transChoice (key, number, values = {}, locale = null) {
@@ -117,6 +117,6 @@ export default class Translator {
 
     const template = message.findPluralTemplate(number)
 
-    return template ? this._applyFilters(template, { ...values }, locale) : key
+    return template ? this._applyFormatters(template, { ...values }, locale) : key
   }
 }

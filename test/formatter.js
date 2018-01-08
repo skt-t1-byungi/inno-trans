@@ -6,7 +6,7 @@ test('basic', t => {
   let captureLocale = null
   let captureTag = null
 
-  const filter = (message, values, locale, tag) => {
+  const formatter = (message, values, locale, tag) => {
     captureValues = values
     captureLocale = locale
     captureTag = tag
@@ -15,7 +15,7 @@ test('basic', t => {
 
   const lang = trans({
     locale: 'ko',
-    filter: [filter],
+    formatter: [formatter],
     message: {
       ko: {
         'hello': '안녕 {name}'
@@ -30,7 +30,7 @@ test('basic', t => {
   t.deepEqual(captureTag, ['{', '}'])
 })
 
-test('add filter', t => {
+test('add formatter', t => {
   const lang = trans({
     locale: 'ko',
     message: {
@@ -42,6 +42,6 @@ test('add filter', t => {
 
   t.is(lang.trans('hello'), '안녕')
 
-  lang.filter((message, values, locale) => '!!' + message + '!!')
+  lang.formatter((message, values, locale) => '!!' + message + '!!')
   t.is(lang.trans('hello'), '!!안녕!!')
 })
