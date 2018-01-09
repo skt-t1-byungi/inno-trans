@@ -133,13 +133,50 @@ output
 ~~hello!~~
 ```
 
+### Filter
+```js
+const lang = trans({
+  locale: 'en',
+  filter: {
+    upper: v => v.toUpperCase()
+  },
+  message: {
+    en: { 'hello': 'hello! {name|upper}!' },
+  }
+})
+
+> lang.trans('hello', {name: 'byungi'})
+```
+output
+```
+hello, BYUNGI!
+```
+
 ### Possible to load lazily
 ```js
 lang
   .message('en', {apple : 'an apple|apples'})
-  .filter([filter1, filter2])
+  .formatter([formatter1, formatter2])
+  .filter('upper', upperFilter)
   .fallback(['ko', 'jp'])
   .tag(['<%=', '%>'])
+```
+
+### Plugin 
+```js
+const plugin = lang => {
+  lang.message(...).filter(...).formatter(...);
+}
+
+lang.use(plugin)
+```
+
+### Short method
+```js
+const __ = trnas({...})
+
+> __.t('hello') // alias "trans"
+> __.tc('apple', 3) // alias "transChoice"
 ```
 
 ## License

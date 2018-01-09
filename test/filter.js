@@ -1,7 +1,7 @@
 import test from 'ava'
 import trans from '../src/index'
 
-test('basic', t => {
+test('basic filter', t => {
   const lang = trans({
     locale: 'ko',
     message: {

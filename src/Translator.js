@@ -151,4 +151,10 @@ export default class Translator {
   tc (...args) {
     return this.transChoice(...args)
   }
+
+  use (plugin) {
+    plugin(this)
+
+    return this
+  }
 }
