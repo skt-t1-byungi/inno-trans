@@ -1,13 +1,14 @@
-import parse from './parse'
+import parsePlurals from './parsePlurals'
 
 export default class Message {
   constructor (text) {
     this._text = text
-    this._parsed = null
+    this._plurals = null
+    this._tempalte = null
   }
 
-  get parsed () {
-    return this._parsed || (this._parsed = parse(this._text))
+  get plurals () {
+    return this._plurals || (this._plurals = parsePlurals(this._text))
   }
 
   get template () {
@@ -19,8 +20,7 @@ export default class Message {
    * @returns {string|null}
    */
   findPluralTemplate (number) {
-    const plural = this.parsed
-      .find(({min, max}) => number <= max && number >= min)
+    const plural = this.plurals.find(({min, max}) => number <= max && number >= min)
 
     return plural ? plural.value : null
   }

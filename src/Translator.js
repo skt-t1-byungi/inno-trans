@@ -1,4 +1,4 @@
-import { fetchValuesFilter } from './filters'
+import makeReplace from './makeReplace'
 
 export default class Translator {
   /**
@@ -10,13 +10,17 @@ export default class Translator {
     // these props must be initialized by setter method.
     this._locale = null
     this._tag = null
+    this._replace = null
 
     this._fallbacks = []
-    this._filters = []
+    this._formatters = []
+    this._filters = {}
+
+    this._replaceFormatter = this._replaceFormatter.bind(this)
   }
 
   message (local, texts = {}) {
-    this._repository.add(local, texts)
+    this._repository.addMessages(local, texts)
 
     return this
   }
@@ -32,14 +36,24 @@ export default class Translator {
   }
 
   /**
-   * @param {function|function[]} filters
+   * @param {function|function[]} formatters
    */
-  filter (filters) {
-    if (typeof filters === 'function') {
-      filters = [filters]
+  formatter (formatters) {
+    if (typeof formatters === 'function') {
+      formatters = [formatters]
     }
 
-    this._filters.push(...filters)
+    this._formatters.push(...formatters)
+
+    return this
+  }
+
+  filter (name, filter) {
+    if (typeof filter !== 'function') {
+      throw new TypeError(`filter(${name}) is not a function type.`)
+    }
+
+    this._filters[name] = filter
 
     return this
   }
@@ -71,6 +85,7 @@ export default class Translator {
     }
 
     this._tag = [prefix, suffix]
+    this._replace = makeReplace(prefix, suffix)
 
     return this
   }
@@ -80,7 +95,14 @@ export default class Translator {
 
     const message = this._findMessage(key, locale)
 
-    return message ? this._applyFilters(message.template, { ...values }, locale) : key
+    return message ? this._applyFormatters(message.template, { ...values }, locale) : key
+  }
+
+  /**
+   * @alias this.trans
+   */
+  t (...args) {
+    return this.trans(...args)
   }
 
   _normalizeLocale (locale) {
@@ -101,10 +123,13 @@ export default class Translator {
     return this._repository.findMessageWithFallback(locales, key)
   }
 
-  _applyFilters (template, values, locale) {
-    const filters = [ ...this._filters, fetchValuesFilter ]
+  _applyFormatters (template, values, locale) {
+    return [ this._replaceFormatter, ...this._formatters ]
+      .reduce((template, formatter) => formatter(template, values, locale), template)
+  }
 
-    return filters.reduce((template, filter) => filter(template, values, locale, this._tag), template)
+  _replaceFormatter (template, values) {
+    return this._replace(template, values, this._filters)
   }
 
   transChoice (key, number, values = {}, locale = null) {
@@ -117,6 +142,13 @@ export default class Translator {
 
     const template = message.findPluralTemplate(number)
 
-    return template ? this._applyFilters(template, { ...values }, locale) : key
+    return template ? this._applyFormatters(template, { ...values }, locale) : key
+  }
+
+  /**
+   * @alias this.transChoice
+   */
+  tc (...args) {
+    return this.transChoice(...args)
   }
 }

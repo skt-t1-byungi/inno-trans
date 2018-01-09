@@ -72,6 +72,6 @@ class Parser {
   }
 }
 
-export default function parse (text) {
+export default function (text) {
   return (new Parser(text)).parse()
 }

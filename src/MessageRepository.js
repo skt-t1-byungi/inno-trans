@@ -5,7 +5,7 @@ export default class MessageRepository {
     this._repository = {}
   }
 
-  add (locale, texts = {}) {
+  addMessages (locale, texts = {}) {
     const messages = this._repository[locale] || (this._repository[locale] = {})
 
     for (const key in texts) {

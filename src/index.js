@@ -6,8 +6,9 @@ export default function trans (
     locale,
     message = {},
     fallback = [],
+    filter = {},
     tag = ['{', '}'],
-    filter = []
+    formatter = []
   } = {}
 ) {
   if (!locale) {
@@ -20,9 +21,13 @@ export default function trans (
     translator.message(locale, message[locale])
   }
 
+  for (const name in filter) {
+    translator.filter(name, filter[name])
+  }
+
   return translator
     .locale(locale)
     .fallback(fallback)
     .tag(tag)
-    .filter(filter)
+    .formatter(formatter)
 }

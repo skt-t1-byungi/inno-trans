@@ -92,7 +92,7 @@ some
 many
 ```
 
-### Support fallback
+### Fallback
 ```js
 const lang = trans({
   locale: 'en',
@@ -112,15 +112,15 @@ hello!
 👌
 ```
 
-### Support Filter
+### Formatter
 ```js
-const customFilter = (message, values, locale, tag) =>{
+const customFormatter = (message, values, locale) =>{
   return '~~' + message + '~~'
 }
 
 const lang = trans({
   locale: 'en',
-  filter: [customFilter],
+  formatter: [customFormatter],
   message: {
     en: { 'hello': 'hello!' },
   }
@@ -136,9 +136,7 @@ output
 ### Possible to load lazily
 ```js
 lang
-  .message('en', {
-    'apple' : 'an apple|apples'
-  })
+  .message('en', {apple : 'an apple|apples'})
   .filter([filter1, filter2])
   .fallback(['ko', 'jp'])
   .tag(['<%=', '%>'])

@@ -76,12 +76,16 @@ test('change tag', t => {
     tag: ['<%=', '%>'],
     message: {
       ko: {
-        'hello': '안녕하세요, <%= name %>님. <%=name%>님께서는 오늘 <%=todo%>를 하셨나요?'
+        'hello': '안녕하세요, <%= name %>님. <%=name%>님께서는 오늘 <%=todo%>를 하셨나요?',
       }
     }
   })
 
   t.is(lang.trans('hello', { name: '철수', todo: '숙제' }), '안녕하세요, 철수님. 철수님께서는 오늘 숙제를 하셨나요?')
+
+  lang.tag(['[', ']'])
+  lang.message('ko', {test: '[aaa], 아니야'})
+  t.is(lang.trans('test', { aaa: '응'}), '응, 아니야')
 })
 
 test('add messages', t => {
