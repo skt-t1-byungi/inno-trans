@@ -138,10 +138,10 @@ output
 const lang = trans({
   locale: 'en',
   filter: {
-    upper: v => v.toUpperCase()
+    upper: v => v.toUpperCase() //add filter
   },
   message: {
-    en: { 'hello': 'hello! {name|upper}!' },
+    en: { 'hello': 'hello! {name|upper}!' }, // using by "|"
   }
 })
 
