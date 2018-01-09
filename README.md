@@ -133,10 +133,12 @@ output
 ~~hello!~~
 ```
 
-### possible to load lazily
+### Possible to load lazily
 ```js
 lang
-  .message('en', addMessages)
+  .message('en', {
+    'apple' : 'an apple|apples'
+  })
   .filter([filter1, filter2])
   .fallback(['ko', 'jp'])
   .tag(['<%=', '%>'])
