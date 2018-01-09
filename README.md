@@ -119,11 +119,9 @@ const customFormatter = (message, values, locale) =>{
 }
 
 const lang = trans({
-  locale: 'en',
   formatter: [customFormatter],
-  message: {
-    en: { 'hello': 'hello!' },
-  }
+  message: { en: { 'hello': 'hello!' } }
+  ...
 })
 
 > lang.trans('hello')
@@ -136,13 +134,13 @@ output
 ### Filter
 ```js
 const lang = trans({
-  locale: 'en',
   filter: {
     upper: v => v.toUpperCase() //add filter
   },
   message: {
     en: { 'hello': 'hello! {name|upper}!' }, // using by "|"
   }
+  ...
 })
 
 > lang.trans('hello', {name: 'byungi'})
@@ -150,19 +148,6 @@ const lang = trans({
 output
 ```
 hello, BYUNGI!
-```
-
-
-### Plugin 
-```js
-const plugin = lang => {
-  lang.message(...).filter(...).formatter(...);
-}
-
-const lang = trnas({
-  plugin: [plugin]
-  ...
-})
 ```
 
 ### Possible to load lazily
@@ -176,6 +161,18 @@ lang
   .tag(['<%=', '%>'])
 ```
 
+### Plugin 
+```js
+const plugin = lang => {
+  lang.message(...).filter(...).formatter(...);
+}
+
+const lang = trnas({
+  plugin: [plugin]
+  ...
+})
+```
+
 ### Short method
 ```js
 const __ = trnas({...})
@@ -183,6 +180,9 @@ const __ = trnas({...})
 > __.t('hello') // alias "trans"
 > __.tc('apple', 3) // alias "transChoice"
 ```
+
+## Plugins
+[inno-trans-korean-josa-plugin](https://github.com/skt-t1-byungi/inno-trans-korean-josa-plugin)
 
 ## License
 MIT
