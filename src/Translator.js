@@ -152,8 +152,15 @@ export default class Translator {
     return this.transChoice(...args)
   }
 
+  /**
+   * @param {function|function[]} plugin
+   */
   use (plugin) {
-    plugin(this)
+    if (typeof plugin === 'function') {
+      plugin = [plugin]
+    }
+
+    plugin.forEach(plugin => plugin(this))
 
     return this
   }

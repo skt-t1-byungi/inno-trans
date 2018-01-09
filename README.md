@@ -40,7 +40,7 @@ output
 hello~!
 ```
 
-### Support variable
+### Variable
 ```js
 ...
 message: { en: { 'hello': '{name}, hello~!' } }
@@ -152,15 +152,6 @@ output
 hello, BYUNGI!
 ```
 
-### Possible to load lazily
-```js
-lang
-  .message('en', {apple : 'an apple|apples'})
-  .formatter([formatter1, formatter2])
-  .filter('upper', upperFilter)
-  .fallback(['ko', 'jp'])
-  .tag(['<%=', '%>'])
-```
 
 ### Plugin 
 ```js
@@ -168,7 +159,21 @@ const plugin = lang => {
   lang.message(...).filter(...).formatter(...);
 }
 
-lang.use(plugin)
+const lang = trnas({
+  plugin: [plugin]
+  ...
+})
+```
+
+### Possible to load lazily
+```js
+lang
+  .use(plugin)
+  .message('en', {apple : 'an apple|apples'})
+  .formatter([formatter1, formatter2])
+  .filter('upper', upperFilter)
+  .fallback(['ko', 'jp'])
+  .tag(['<%=', '%>'])
 ```
 
 ### Short method

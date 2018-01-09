@@ -3,12 +3,16 @@ function escape (str) {
 }
 
 export default function makeReplace (prefix, suffix) {
-  const regex = new RegExp(`${escape(prefix)}\\s*(\\w+)\\s*((?:\\|\\s*\\w*\\s*)*)${escape(suffix)}`, 'g')
+  const regex = new RegExp(`${escape(prefix)}\\s*([^\\s|]+)\\s*((?:\\|\\s*[^\\s|]+\\s*)*)${escape(suffix)}`, 'g')
 
   return (text, values, filters) => {
     const changed = text.replace(regex, (match, key, filterExpr) => {
       if (!values.hasOwnProperty(key)) {
         return match
+      }
+
+      if (!filterExpr) {
+        return values[key]
       }
 
       return filterExpr.split('|')

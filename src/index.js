@@ -8,7 +8,8 @@ export default function trans (
     fallback = [],
     filter = {},
     tag = ['{', '}'],
-    formatter = []
+    formatter = [],
+    plugin = []
   } = {}
 ) {
   if (!locale) {
@@ -30,4 +31,5 @@ export default function trans (
     .fallback(fallback)
     .tag(tag)
     .formatter(formatter)
+    .use(plugin)
 }
