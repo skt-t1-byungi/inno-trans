@@ -28,3 +28,20 @@ test('basic filter', t => {
   t.is(lang.trans('test3', {name:"안녕"}), '테스트 __$$안녕$$__')
   t.is(lang.trans('test4', {name:"안녕"}), '테스트 $$__안녕__$$')
 })
+
+test('with transchoice', t => {
+  const lang = trans({
+    locale: 'ko',
+    message: {
+      ko: { 
+        'test': '테스트 {name|a}|{name|a} 테스트' ,
+      }
+    },
+    filter: {
+      a : value => '$$' + value + '$$'
+    }
+  })
+
+  t.is(lang.transChoice('test', 1, {name:"안녕"}), '테스트 $$안녕$$')
+  t.is(lang.transChoice('test', 2, {name:"안녕"}), '$$안녕$$ 테스트')
+})
