@@ -11,7 +11,7 @@ class Parser {
   }
 
   _splitUsingDelimiter () {
-    return this._text.match(/(?:({[^}]*})|([^{|])|(\|\|))+/g)
+    return this._text.match(/(?:({[^}]*})|([^|])|(\|\|))+/g)
   }
 
   _parseSplitedText (text, index, texts) {
