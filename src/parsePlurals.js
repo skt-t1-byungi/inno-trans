@@ -7,16 +7,15 @@ class Parser {
     const texts = this._splitUsingDelimiter()
 
     return texts.length === 1 ? []
-      : texts.map((...args) => this._parseSplitedText(...args))
+      : texts
+        .map((...args) => this._parseSplitedText(...args))
   }
 
   _splitUsingDelimiter () {
-    return this._text.match(/(?:({[^}]*})|([^|])|(\|\|))+/g)
+    return this._text.match(/(?:({[^}]*})|(\\\|)|([^|]))+/g)
   }
 
   _parseSplitedText (text, index, texts) {
-    text = text.replace(/\|\|/g, '|')
-
     return this._attemptEqualTypeParsing(text) || this._attemptBetweenTypeParsing(text) ||
     {
       min: index === 0 ? -Infinity : index + 1,

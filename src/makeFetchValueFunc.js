@@ -2,7 +2,7 @@ function escape (str) {
   return str.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
 }
 
-export default function makeReplace (prefix, suffix) {
+export default function makeFetchValueFunc (prefix, suffix) {
   const regex = new RegExp(`${escape(prefix)}\\s*([^\\s|]+)\\s*((?:\\|\\s*[^\\s|]+\\s*)*)${escape(suffix)}`, 'g')
 
   return (text, values, filters) => {

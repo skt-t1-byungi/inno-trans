@@ -81,21 +81,6 @@ test('nonsense', t => {
   t.is(lang.transChoice('test', 11), 'test')
 })
 
-test('|| -> |', t => {
-  const lang = trans({
-    locale: 'ko',
-    message: {
-      ko: {
-        'test': 'a||b|b'
-      }
-    }
-  })
-
-  t.is(lang.trans('test'), 'a||b|b')
-  t.is(lang.transChoice('test', 1), 'a|b')
-  t.is(lang.transChoice('test', 2), 'b')
-})
-
 test('typo', t => {
   const lang = trans({
     locale: 'ko',
@@ -109,4 +94,17 @@ test('typo', t => {
   t.is(lang.transChoice('test', 0), '{{0}0')
   t.is(lang.transChoice('test', 1), '{{0}0')
   t.is(lang.transChoice('test', 2), '2')
+})
+
+test('none choice', t => {
+  const lang = trans({
+    locale: 'ko',
+    message: {
+      ko: {
+        'test': 'one'
+      }
+    }
+  })
+
+  t.is(lang.transChoice('test', 0), 'test')
 })

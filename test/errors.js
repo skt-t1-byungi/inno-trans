@@ -28,5 +28,5 @@ test('invalid message', t => {
         ko: { test: undefined }
       }
     })
-  })
+  }) 
 })

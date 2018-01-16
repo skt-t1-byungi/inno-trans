@@ -76,7 +76,7 @@ test('change tag', t => {
     tag: ['<%=', '%>'],
     message: {
       ko: {
-        'hello': '안녕하세요, <%= name %>님. <%=name%>님께서는 오늘 <%=todo%>를 하셨나요?',
+        'hello': '안녕하세요, <%= name %>님. <%=name%>님께서는 오늘 <%=todo%>를 하셨나요?'
       }
     }
   })
@@ -85,7 +85,7 @@ test('change tag', t => {
 
   lang.tag(['[', ']'])
   lang.message('ko', {test: '[aaa], 아니야'})
-  t.is(lang.trans('test', { aaa: '응'}), '응, 아니야')
+  t.is(lang.trans('test', { aaa: '응' }), '응, 아니야')
 })
 
 test('add messages', t => {
@@ -102,4 +102,49 @@ test('add messages', t => {
   lang.message('ko', {add: '추가'})
   t.is(lang.trans('test'), '테스트')
   t.is(lang.trans('add'), '추가')
+})
+
+test('toString', t => {
+  const lang = trans({
+    locale: 'ko',
+    message: {
+      ko: {
+        test1: {},
+        test2: {
+          toString () {
+            return '테스트'
+          }
+        }
+      }
+    }
+  })
+
+  t.is(lang.trans('test1'), '[object Object]')
+  t.is(lang.trans('test2'), '테스트')
+})
+
+test('regex passes', t => {
+  const lang = trans({
+    locale: 'ko',
+    message: {
+      ko: {
+        'test1': '\\{0\\}one',
+        'test2': 'one\\|two',
+        'test3': 'one\\\\|two',
+        'test4': 'one\\\\\\|two',
+        'test5': '\\{0\\}one|\\[2,4\\]many',
+        'test6': '{0\\}one|\\[2,4]many'
+      }
+    }
+  })
+
+  t.is(lang.trans('test1', [1]), '{0}one')
+  t.is(lang.trans('test2'), 'one|two')
+  t.is(lang.transChoice('test2', 1), 'test2')
+  t.is(lang.trans('test3'), 'one\\|two')
+  t.is(lang.trans('test4'), 'one\\\\|two')
+  t.is(lang.transChoice('test5', 1), '{0}one')
+  t.is(lang.transChoice('test5', 5), '[2,4]many')
+  t.is(lang.transChoice('test6', 1), '{0}one')
+  t.is(lang.transChoice('test6', 5), '[2,4]many')
 })

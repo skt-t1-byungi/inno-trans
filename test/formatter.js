@@ -42,3 +42,19 @@ test('add formatter', t => {
   lang.formatter((message, values, locale) => '!!' + message + '!!')
   t.is(lang.trans('hello'), '!!안녕!!')
 })
+
+test('transform formatter', t => {
+  const lang = trans({
+    locale: 'ko',
+    message: {
+      ko: {
+        'hello': '안녕|음'
+      }
+    }
+  })
+
+  t.is(lang.transChoice('hello', 0), '안녕')
+  lang.formatter((message, values, locale) => '{0}!!' + message + '!!')
+
+  t.is(lang.transChoice('hello', 0), '{0}!!안녕!!')
+})

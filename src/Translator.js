@@ -1,4 +1,4 @@
-import makeReplace from './makeReplace'
+import makeFetchValueFunc from './makeFetchValueFunc'
 
 export default class Translator {
   /**
@@ -10,13 +10,14 @@ export default class Translator {
     // these props must be initialized by setter method.
     this._locale = null
     this._tag = null
-    this._replace = null
+    this._fetchValue = null
 
     this._fallbacks = []
     this._formatters = []
     this._filters = {}
 
-    this._replaceFormatter = this._replaceFormatter.bind(this)
+    this._fetchValueFormatter = this._fetchValueFormatter.bind(this)
+    this._escapeCharFormatter = this._escapeCharFormatter.bind(this)
   }
 
   message (local, texts = {}) {
@@ -85,7 +86,7 @@ export default class Translator {
     }
 
     this._tag = [prefix, suffix]
-    this._replace = makeReplace(prefix, suffix)
+    this._fetchValue = makeFetchValueFunc(prefix, suffix)
 
     return this
   }
@@ -124,12 +125,16 @@ export default class Translator {
   }
 
   _applyFormatters (template, values, locale) {
-    return [ this._replaceFormatter, ...this._formatters ]
+    return [ this._fetchValueFormatter, this._escapeCharFormatter, ...this._formatters ]
       .reduce((template, formatter) => formatter(template, values, locale), template)
   }
 
-  _replaceFormatter (template, values) {
-    return this._replace(template, values, this._filters)
+  _fetchValueFormatter (template, values) {
+    return this._fetchValue(template, values, this._filters)
+  }
+
+  _escapeCharFormatter (template) {
+    return template.replace(/\\([[\]{}|])/g, '$1')
   }
 
   transChoice (key, number, values = {}, locale = null) {
