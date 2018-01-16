@@ -7,8 +7,7 @@ class Parser {
     const texts = this._splitUsingDelimiter()
 
     return texts.length === 1 ? []
-      : texts
-        .map((...args) => this._parseSplitedText(...args))
+      : texts.map((...args) => this._parseSplitedText(...args))
   }
 
   _splitUsingDelimiter () {
