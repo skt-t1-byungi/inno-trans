@@ -4,7 +4,6 @@ export default class Message {
   constructor (text) {
     this._text = text
     this._plurals = null
-    this._tempalte = null
   }
 
   get plurals () {
