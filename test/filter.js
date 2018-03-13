@@ -1,5 +1,5 @@
 import test from 'ava'
-import trans from '../src/index'
+import trans from '../src'
 
 test('basic filter', t => {
   const lang = trans({

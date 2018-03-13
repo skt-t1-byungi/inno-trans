@@ -1,5 +1,5 @@
 import test from 'ava'
-import trans from '../src/index'
+import trans from '../src'
 
 test('no locale', t => {
   t.throws(() => {
@@ -28,5 +28,5 @@ test('invalid message', t => {
         ko: { test: undefined }
       }
     })
-  }) 
+  })
 })
