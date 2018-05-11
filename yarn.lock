@@ -1356,9 +1356,9 @@ eslint-ast-utils@^1.0.0:
     lodash.get "^4.4.2"
     lodash.zip "^4.2.0"
 
-eslint-config-byungi@^0.0.11:
-  version "0.0.11"
-  resolved "https://registry.yarnpkg.com/eslint-config-byungi/-/eslint-config-byungi-0.0.11.tgz#c88895bee18d44e0739bd23f28dda47d3c1a863b"
+eslint-config-byungi@^0.0.13:
+  version "0.0.13"
+  resolved "https://registry.yarnpkg.com/eslint-config-byungi/-/eslint-config-byungi-0.0.13.tgz#2d31451705d104237b6966f1e79fb84215d98415"
   dependencies:
     eslint-config-standard "^11.0.0-beta.0"
     eslint-plugin-ava "^4.5.0"

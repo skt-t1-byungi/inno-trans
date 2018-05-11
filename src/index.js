@@ -18,13 +18,8 @@ export default function trans (
 
   const translator = new Translator(new MessageRepository())
 
-  for (const locale in message) {
-    translator.message(locale, message[locale])
-  }
-
-  for (const name in filter) {
-    translator.filter(name, filter[name])
-  }
+  for (const locale in message) translator.message(locale, message[locale])
+  for (const name in filter) translator.filter(name, filter[name])
 
   return translator
     .locale(locale)

@@ -40,9 +40,7 @@ export default class Translator {
    * @param {function|function[]} formatters
    */
   formatter (formatters) {
-    if (typeof formatters === 'function') {
-      formatters = [formatters]
-    }
+    if (typeof formatters === 'function') formatters = [formatters]
 
     this._formatters.push(...formatters)
 
@@ -63,9 +61,7 @@ export default class Translator {
    * @param {string|string[]} fallbacks
    */
   fallback (fallbacks) {
-    if (typeof fallbacks === 'string') {
-      fallbacks = [fallbacks]
-    }
+    if (typeof fallbacks === 'string') fallbacks = [fallbacks]
 
     for (const fallback of fallbacks) {
       if (!this._repository.hasLocale(fallback)) {
@@ -91,12 +87,13 @@ export default class Translator {
     return this
   }
 
-  trans (key, values = {}, locale = null) {
+  trans (key, values = {}, {locale, defaultMessage} = {}) {
     locale = this._normalizeLocale(locale)
 
     const message = this._findMessage(key, locale)
+    const template = message ? message.template : defaultMessage
 
-    return message ? this._applyFormatters(message.template, { ...values }, locale) : key
+    return template ? this._applyFormatters(template, { ...values }, locale) : key
   }
 
   /**
@@ -107,21 +104,14 @@ export default class Translator {
   }
 
   _normalizeLocale (locale) {
-    if (!locale) {
-      return this._locale
-    }
-
-    if (this._repository.hasLocale(locale)) {
-      return locale
-    }
+    if (!locale) return this._locale
+    if (this._repository.hasLocale(locale)) return locale
 
     throw new TypeError(`"${locale}" messages have not been added.`)
   }
 
   _findMessage (key, locale) {
-    const locales = [locale, ...this._fallbacks]
-
-    return this._repository.findMessageWithFallback(locales, key)
+    return this._repository.findMessageWithFallback([locale, ...this._fallbacks], key)
   }
 
   _applyFormatters (template, values, locale) {
@@ -137,15 +127,11 @@ export default class Translator {
     return template.replace(/\\([[\]{}|])/g, '$1')
   }
 
-  transChoice (key, number, values = {}, locale = null) {
+  transChoice (key, number, values = {}, {locale, defaultMessage} = {}) {
     locale = this._normalizeLocale(locale)
+
     const message = this._findMessage(key, locale)
-
-    if (!message) {
-      return key
-    }
-
-    const template = message.findPluralTemplate(number)
+    const template = message ? message.findPluralTemplate(number) : defaultMessage
 
     return template ? this._applyFormatters(template, { ...values }, locale) : key
   }
@@ -161,9 +147,7 @@ export default class Translator {
    * @param {function|function[]} plugin
    */
   use (plugin) {
-    if (typeof plugin === 'function') {
-      plugin = [plugin]
-    }
+    if (typeof plugin === 'function') plugin = [plugin]
 
     plugin.forEach(plugin => plugin(this))
 
