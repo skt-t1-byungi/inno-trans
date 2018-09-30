@@ -8,7 +8,7 @@ import { Formatter, Plugin, TemplateMap, ValueFetcher, ValueFilter, ValueFilterM
 import { assertType } from './util'
 
 type TransOptions = Partial<{locale: string, defaults: string}>
-type TranslatorEvents = 'init' | 'add' | 'change'
+type TranslatorEvents = 'init' | 'add' | 'remove' | 'change'
 
 export default class Translator {
     public t: (key: string, values: ValueMap, opts: TransOptions) => string
@@ -45,6 +45,16 @@ export default class Translator {
         return this
     }
 
+    public getLocales () {
+        return this._messageRepo.getLocales()
+    }
+
+    public removeMessages (locale?: string | string[]) {
+        const removed = this._messageRepo.removeMessages(locale)
+        this._emitter.emit('remove', removed)
+        return this
+    }
+
     public message (locale: string, templates: TemplateMap) {
         this._messageRepo.addMessages(locale, templates)
 
@@ -59,7 +69,14 @@ export default class Translator {
 
     public locale (locale: string) {
         this._locale = locale
-        if (this._initted) this._emitter.emit('change', locale)
+
+        if (!this._initted && this._messageRepo.hasLocale(locale)) {
+            this._initted = true
+            this._emitter.emit('init')
+        } else {
+            this._emitter.emit('change', locale)
+        }
+
         return this
     }
 
