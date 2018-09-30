@@ -3,11 +3,11 @@ import { ValueFetcher } from './types'
 import { hasOwn } from './util'
 
 export default function makeFetcher (prefix: string, suffix: string): ValueFetcher {
-    const regex = new RegExp(`${escape(prefix)}\\s*([^\\s|]+)\\s*((?:\\|\\s*[^\\s|]+\\s*)*)${escape(suffix)}`, 'g')
+    const regex = new RegExp(`${escape(prefix)}\\s*([^\\s|]+?)\\s*((?:\\|\\s*[^\\s|]+\\s*)*)${escape(suffix)}`, 'g')
 
     return (template, values, filters) => {
         const replacer = (match: string, key: string, filterStr: string) => {
-            if (hasOwn(values, key)) return match
+            if (!hasOwn(values, key)) return ''
             if (!filterStr) return String(values[key])
 
             const str = reduce(

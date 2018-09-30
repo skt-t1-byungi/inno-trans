@@ -13,7 +13,7 @@ interface TranslatorOptions {
     plugin: Plugin[]
 }
 
-export default function InnoTrans ({
+export = function InnoTrans ({
     locale,
     message = {},
     fallback = [],
