@@ -1,0 +1,53 @@
+{
+    "name": "inno-trans",
+    "version": "2.0.0",
+    "main": "lib/index.js",
+    "module": "dist/inno-trans.es.js",
+    "unpkg": "dist/inno-trans.min.js",
+    "author": {
+        "name": "skt-t1-byungi",
+        "email": "tiniwz@gmail.com"
+    },
+    "keywords": [
+        "i18n",
+        "translation",
+        "localization",
+        "localize",
+        "globalize"
+    ],
+    "files": [
+        "lib",
+        "dist"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/skt-t1-byungi/inno-trans.git"
+    },
+    "license": "MIT",
+    "scripts": {
+        "test": "tsc && ava",
+        "build": "tsc && bili lib/index.js --format es,umd-min --no-js --no-map --moduleName InnoTrans"
+    },
+    "devDependencies": {
+        "ava": "^0.25.0",
+        "bili": "^3.1.2",
+        "eslint": "^5.6.1",
+        "eslint-config-byungi": "^0.2.1",
+        "tslint": "^5.11.0",
+        "tslint-config-byungi": "^0.0.8",
+        "typescript": "^3.1.1"
+    },
+    "dependencies": {
+        "@skt-t1-byungi/array-find": "^0.1.0",
+        "@skt-t1-byungi/array-for-each": "^0.1.0",
+        "@skt-t1-byungi/array-includes": "^0.1.0",
+        "@skt-t1-byungi/array-map": "^0.1.0",
+        "@skt-t1-byungi/array-reduce": "^0.1.0",
+        "@skt-t1-byungi/event-emitter": "^0.1.1",
+        "tslib": "^1.9.3"
+    },
+    "eslintConfig": {
+        "extends": "byungi"
+    },
+    "eslintIgnore": ["lib","dist","src"]
+}
