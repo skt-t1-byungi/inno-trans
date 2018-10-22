@@ -1,7 +1,7 @@
 import find from '@skt-t1-byungi/array-find'
 import Translator from './Translator'
 import { Formatter, Plugin, TemplateLocaleMap, ValueFilterMap } from './types'
-import { hasOwn } from './util'
+import { each } from './util'
 
 interface TranslatorOptions {
     locale: string,
@@ -23,23 +23,18 @@ export = function InnoTrans ({
     plugin = []
 }: Partial<TranslatorOptions> = {}) {
     const translator = new Translator()
-    const candidates = []
+    const locales: string[] = []
 
-    for (const locale in message) {
-        if (hasOwn(message, locale)) {
-            candidates.push(locale)
-            translator.message(locale, message[locale])
-        }
-    }
+    each(message, (templates, locale) => {
+        locales.push(locale)
+        translator.message(locale, templates)
+    })
 
-    for (const name in filter) {
-        if (hasOwn(message, name)) translator.filter(name, filter[name])
-    }
-
+    each(filter, (filter, name) => translator.filter(name, filter))
     for (const fn of formatter) translator.formatter(fn)
 
     return translator
-        .locale(locale || detectLocale(candidates))
+        .locale(locale || detectLocale(locales))
         .fallback(fallback)
         .tag(tag)
         .use(plugin)

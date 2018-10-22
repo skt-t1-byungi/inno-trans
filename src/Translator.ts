@@ -8,7 +8,7 @@ import { Formatter, Plugin, TemplateMap, ValueFetcher, ValueFilter, ValueFilterM
 import { assertType } from './util'
 
 type TransOptions = Partial<{locale: string, defaults: string}>
-type TranslatorEvents = 'init' | 'add' | 'remove' | 'change'
+type TranslatorEvents = 'load' | 'add' | 'remove' | 'change'
 
 export default class Translator {
     public t: (key: string, values: ValueMap, opts: TransOptions) => string
@@ -16,7 +16,7 @@ export default class Translator {
 
     private _messageRepo = new MessageRepo()
     private _emitter = new EventEmitter()
-    private _initted = false
+    private _loaded = false
     private _locale!: string
     private _fetcher!: ValueFetcher
     private _fallbacks: string[] = []
@@ -50,33 +50,30 @@ export default class Translator {
     }
 
     public removeMessages (locale?: string | string[]) {
-        const removed = this._messageRepo.removeMessages(locale)
-        this._emitter.emit('remove', removed)
+        const locales = this._messageRepo.removeMessages(locale)
+        if (locales.length > 0) this._emitter.emit('remove', locales)
         return this
     }
 
     public message (locale: string, templates: TemplateMap) {
         this._messageRepo.addMessages(locale, templates)
+        this._emitter.emit('add', locale)
 
-        if (!this._initted && locale === this._locale) {
-            this._initted = true
-            this._emitter.emit('init')
+        if (locale === this._locale) {
+            if (this._loaded) {
+                this._emitter.emit('change', locale)
+            } else {
+                this._loaded = true
+                this._emitter.emit('load')
+            }
         }
 
-        this._emitter.emit('add', locale)
         return this
     }
 
     public locale (locale: string) {
         this._locale = locale
-
-        if (!this._initted && this._messageRepo.hasLocale(locale)) {
-            this._initted = true
-            this._emitter.emit('init')
-        } else {
-            this._emitter.emit('change', locale)
-        }
-
+        if (this._messageRepo.hasLocale(locale)) this._emitter.emit('change', locale)
         return this
     }
 
