@@ -30,13 +30,27 @@ export default class Translator {
         this.tc = (key, numb, values, opts) => this.transChoice(key, numb, values, opts)
     }
 
-    public on (evtName: TranslatorEvents, listener: () => void) {
-        this._emitter.on(evtName, listener)
+    public on (evtName: 'load', listener: () => void): this
+    public on (evtName: 'add' | 'change', listener: (locale: string) => void): this
+    public on (evtName: 'remove', listener: (locales: string[]) => void): this
+    public on (evtName: TranslatorEvents, listener: (v?: any) => void) {
+        if (evtName === 'load' && this.isLoaded()) {
+            listener()
+        } else {
+            this._emitter.on(evtName, listener)
+        }
         return this
     }
 
-    public once (evtName: TranslatorEvents, listener: () => void) {
-        this._emitter.once(evtName, listener)
+    public once (evtName: 'load', listener: () => void): this
+    public once (evtName: 'add' | 'change', listener: (locale: string) => void): this
+    public once (evtName: 'remove', listener: (locales: string[]) => void): this
+    public once (evtName: TranslatorEvents, listener: (v?: any) => void) {
+        if (evtName === 'load' && this.isLoaded()) {
+            listener()
+        } else {
+            this._emitter.once(evtName, listener)
+        }
         return this
     }
 
@@ -49,7 +63,11 @@ export default class Translator {
         return this._messageRepo.getLocales()
     }
 
-    public removeMessages (locale?: string | string[]) {
+    public isLoaded () {
+        return this._loaded
+    }
+
+    public removeMessage (locale?: string | string[]) {
         const locales = this._messageRepo.removeMessages(locale)
         if (locales.length > 0) this._emitter.emit('remove', locales)
         return this
@@ -58,22 +76,13 @@ export default class Translator {
     public message (locale: string, templates: TemplateMap) {
         this._messageRepo.addMessages(locale, templates)
         this._emitter.emit('add', locale)
-
-        if (locale === this._locale) {
-            if (this._loaded) {
-                this._emitter.emit('change', locale)
-            } else {
-                this._loaded = true
-                this._emitter.emit('load')
-            }
-        }
-
+        if (locale === this._locale) this._emitLocaleChange(locale)
         return this
     }
 
     public locale (locale: string) {
         this._locale = locale
-        if (this._messageRepo.hasLocale(locale)) this._emitter.emit('change', locale)
+        if (this._messageRepo.hasLocale(locale)) this._emitLocaleChange(locale)
         return this
     }
 
@@ -133,6 +142,14 @@ export default class Translator {
         return this
     }
 
+    private _emitLocaleChange (locale: string) {
+        if (this._loaded) {
+            this._emitter.emit('change', locale)
+        } else {
+            this._loaded = true
+            this._emitter.emit('load')
+        }
+    }
     private _findMessage (key: string, locale: string) {
         return this._messageRepo.findMessage([locale, ...this._fallbacks], key)
     }

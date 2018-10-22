@@ -40,7 +40,7 @@ export = function InnoTrans ({
         .use(plugin)
 }
 
-function detectLocale (candidates: string[]) {
+function detectLocale (locales: string[]) {
     const lang = navigator.language || (navigator as (Navigator & { userLanguage: string })).userLanguage
-    return find(candidates, str => lang.match(str) !== null) || lang
+    return find(locales, str => lang.match(str) !== null) || lang
 }
