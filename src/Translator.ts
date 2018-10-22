@@ -74,15 +74,19 @@ export default class Translator {
     }
 
     public message (locale: string, templates: TemplateMap) {
+        const hasLocale = this._messageRepo.hasLocale(locale)
         this._messageRepo.addMessages(locale, templates)
         this._emitter.emit('add', locale)
-        if (locale === this._locale) this._emitLocaleChange(locale)
+        if (!hasLocale && locale === this._locale) this._emitLocaleChange(locale)
         return this
     }
 
     public locale (locale: string) {
+        if (locale === this._locale) return this
+
         this._locale = locale
         if (this._messageRepo.hasLocale(locale)) this._emitLocaleChange(locale)
+
         return this
     }
 

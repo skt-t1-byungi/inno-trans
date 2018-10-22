@@ -31,6 +31,26 @@ test('change', t => {
     trans.message('en', {})
 })
 
+test('prevent change evt twice - add message', t => {
+    const trans = new Translator()
+    trans.locale('ko')
+    trans.message('ko', {})
+    trans.once('change', () => t.fail())
+    trans.message('ko', {})
+    t.pass()
+})
+
+test('prevent change evt twice - set same locale', t => {
+    t.plan(1)
+    const trans = new Translator()
+    trans.locale('ko')
+    trans.message('ko', {})
+    trans.message('en', {})
+    trans.on('change', () => t.pass())
+    trans.locale('en')
+    trans.locale('en')
+})
+
 test('add, remove', t => {
     t.plan(2)
     const trans = new Translator()
