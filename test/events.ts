@@ -1,5 +1,5 @@
-const test = require('ava')
-const Translator = require('../lib/Translator').default
+import test from 'ava'
+import Translator from '../src/Translator'
 
 test('load - first, set message', t => {
     const trans = new Translator()

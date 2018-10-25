@@ -1,7 +1,7 @@
-const test = require('ava')
-const Message = require('../lib/Message').default
+import test from 'ava'
+import Message from '../src/Message'
 
-const m = text => new Message(text)
+const m = (text: string) => new Message(text)
 
 test('template', t => {
     t.is(m('abc').template(), 'abc')
@@ -36,7 +36,7 @@ test('findPluralTemplate - index type', t => {
 })
 
 test('findPluralTemplate - equal type', t => {
-    let msg = m('{0}abc|{2}def')
+    const msg = m('{0}abc|{2}def')
     t.falsy(msg.findPluralTemplate(-1))
     t.is(msg.findPluralTemplate(0), 'abc')
     t.falsy(msg.findPluralTemplate(1))
@@ -62,7 +62,7 @@ test('findPluralTemplate - between type', t => {
 })
 
 test('findPluralTemplate - complex', t => {
-    let msg = m('[-*, 2]abc|{3}def|[4,10]123|456')
+    const msg = m('[-*, 2]abc|{3}def|[4,10]123|456')
     t.is(msg.findPluralTemplate(-5), 'abc')
     t.is(msg.findPluralTemplate(0), 'abc')
     t.is(msg.findPluralTemplate(2), 'abc')

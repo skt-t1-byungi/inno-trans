@@ -1,5 +1,5 @@
-const test = require('ava')
-const parse = require('../lib/parsePlurals').default
+import test from 'ava'
+import parse from '../src/parsePlurals'
 
 test('no plurals', t => {
     t.is(parse('abc').length, 0)
