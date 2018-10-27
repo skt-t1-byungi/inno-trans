@@ -1,4 +1,3 @@
-import forEach from '@skt-t1-byungi/array-for-each'
 import includes from '@skt-t1-byungi/array-includes'
 import reduce from '@skt-t1-byungi/array-reduce'
 import EventEmitter from '@skt-t1-byungi/event-emitter'
@@ -86,9 +85,12 @@ export default class Translator {
 
     public message (locale: string, templates: TemplateMap) {
         const hasLocale = this._messageRepo.hasLocale(locale)
-        this._messageRepo.addMessages(locale, templates)
+        const adds = this._messageRepo.addMessages(locale, templates)
+        if (adds === 0) return this
+
         this._emitter.emit('add', locale)
         if (!hasLocale && locale === this._locale) this._emitLocaleChange(locale)
+
         return this
     }
 
@@ -153,7 +155,7 @@ export default class Translator {
 
     public use (plugins: Plugin | Plugin[]) {
         if (typeof plugins === 'function') plugins = [plugins]
-        forEach(plugins, plugin => plugin(this))
+        for (const plugin of plugins) plugin(this)
         return this
     }
 

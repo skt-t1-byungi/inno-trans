@@ -1,28 +1,32 @@
-import reduce from '@skt-t1-byungi/array-reduce'
+import filter from '@skt-t1-byungi/array-filter'
 import Message from './Message'
 import { MessageLocaleMap, TemplateMap } from './types'
-import { each, hasOwn } from './util'
+import { each, entries, hasOwn } from './util'
 
 export default class MessageRepo {
     private _repo: MessageLocaleMap = {}
 
     public addMessages (locale: string, templates: TemplateMap) {
+        const templateEntries = entries(templates)
+        if (templateEntries.length === 0) return 0
+
         const messages = this._repo[locale] || (this._repo[locale] = {})
-        each(templates, (template, key) => (messages[key] = new Message(template)))
+        for (const [k, template] of templateEntries) messages[k] = new Message(template)
+
+        return templateEntries.length
     }
 
     public getLocales () {
-        const repo = this._repo
         const locales: string[] = []
-        each(repo, (_, locale) => locales.push(locale))
+        each(this._repo, (_, locale) => locales.push(locale))
         return locales
     }
 
     public removeMessages (locales?: string | string[]): string[] {
-        if (!locales) {
-            const targets = this.getLocales()
+        if (locales === undefined) {
+            const removes = this.getLocales()
             this._repo = {}
-            return targets
+            return removes
         }
 
         if (typeof locales === 'string') {
@@ -31,7 +35,10 @@ export default class MessageRepo {
             return [locales]
         }
 
-        return reduce(locales, (acc, locale) => acc.concat(this.removeMessages(locale)), [] as string[])
+        locales = filter(locales, locale => this.hasLocale(locale))
+        for (const locale of locales) delete this._repo[locale]
+
+        return locales
     }
 
     public hasLocale (locale: string) {
