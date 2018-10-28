@@ -93,11 +93,11 @@ t.transChoice('apples', 20, {count:20}) // => many (20)
 Fallback a different locale when there is no message.
 ```json
 {
-    en: {},
-    ko: {
+    "en": {},
+    "ko": {
         "index.hello": "안녕~"
     },
-    ja: {
+    "ja": {
         "index.hello": "こんにちは~",
         "index.welcome": "歓迎よ~"
     }
@@ -105,6 +105,7 @@ Fallback a different locale when there is no message.
 ```
 ```js
 t.trans('index.hello') // => index.hello
+t.trans('index.welcome') // => index.welcome
 t.fallback(['ko', 'ja'])
 t.trans('index.hello') // => 안녕~
 t.trans('index.welcome') // => 歓迎よ~
@@ -141,6 +142,7 @@ t.formatter((str, values, locale) =>
 
 t.trans('welcome', {name: 'john'})
 // => <p style="color:red">welcome, john!</p>
+
 t.trans('hello', {name: 'john'})
 // => <div style="color:red">hello, john!</div>
 ```
@@ -180,7 +182,7 @@ trans({
 
 #### options
 - `locale` - Specifies locale. If not specified, it is automatically inferred. 'UNKNOWN' is specified when inferring fails.
-- `fallback` - Specifies locale to find when the message is not in the current locale.
+- `fallback` - Specifies another locale to look for messages that are not in the current locale.
 - `message` - Message resources.
 - `tag` - Prefix and suffix for interpolation. Default `{}`.
 - `filter` - Function for converting interpolation values.
