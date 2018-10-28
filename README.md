@@ -196,12 +196,14 @@ Returns a message that matches the key.
 - `locale` - Specifies the locale. The current locale is ignored.
 - `defaults` - String to return when the message does not exist. If not, a key is returned.
 
-#### Short method - `t.t(key [, values [, options]])`
+#### Short method
+`t.t(key [, values [, options]])`
 
 ### t.transChoice(key, number [, values [, options]])
 Returns a message that matches the key and the quantity number.
 
-#### Short method - `t.tc(key [, values [, options]])`
+#### Short method
+`t.tc(key [, values [, options]])`
 
 ### t.locale([locale])
 If the `locale` argument exists, set a new locale. If not, it returns current locale.
