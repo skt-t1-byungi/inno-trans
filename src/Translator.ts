@@ -69,8 +69,8 @@ export default class Translator {
         return this
     }
 
-    public getLocales () {
-        return this._messageRepo.getLocales()
+    public getAddedLocales () {
+        return this._messageRepo.getAddedLocales()
     }
 
     public isLoaded () {
@@ -94,7 +94,8 @@ export default class Translator {
         return this
     }
 
-    public locale (locale: string) {
+    public locale (locale?: string) {
+        if (locale === undefined) return this._locale
         if (locale === this._locale) return this
 
         this._locale = locale
@@ -115,13 +116,10 @@ export default class Translator {
         return this
     }
 
-    public fallback (fallbacks: string | string[]) {
+    public fallback (fallbacks?: string | string[]) {
+        if (fallbacks === undefined) return this._fallbacks
         if (typeof fallbacks === 'string') fallbacks = [fallbacks]
-
-        for (const fallback of fallbacks) {
-            if (!includes(this._fallbacks, fallback)) this._fallbacks.push(fallback)
-        }
-
+        this._fallbacks = fallbacks.slice(0)
         return this
     }
 

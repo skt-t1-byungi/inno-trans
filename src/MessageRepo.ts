@@ -16,7 +16,7 @@ export default class MessageRepo {
         return templateEntries.length
     }
 
-    public getLocales () {
+    public getAddedLocales () {
         const locales: string[] = []
         each(this._repo, (_, locale) => locales.push(locale))
         return locales
@@ -24,7 +24,7 @@ export default class MessageRepo {
 
     public removeMessages (locales?: string | string[]): string[] {
         if (locales === undefined) {
-            const removes = this.getLocales()
+            const removes = this.getAddedLocales()
             this._repo = {}
             return removes
         }

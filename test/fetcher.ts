@@ -18,7 +18,6 @@ test('fetch values', t => {
 })
 
 test('filter', t => {
-
     const m = (str: string, values: {}) => fetch(str, values, filters)
 
     t.is(m('abc {val|test} def', { val: 123 }), 'abc 2 def')

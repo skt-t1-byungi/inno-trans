@@ -33,14 +33,15 @@ export = function InnoTrans ({
     each(filter, (filter, name) => translator.filter(name, filter))
     for (const fn of formatter) translator.formatter(fn)
 
+    translator.locale(locale || detectLocale(locales))
+    translator.fallback(fallback)
+    translator.tag(tag).use(plugin)
+
     return translator
-        .locale(locale || detectLocale(locales))
-        .fallback(fallback)
-        .tag(tag)
-        .use(plugin)
 }
 
 function detectLocale (locales: string[]) {
     const lang = navigator.language || (navigator as (Navigator & { userLanguage: string })).userLanguage
+    if (!lang) return 'UNKNOWN'
     return find(locales, str => lang.match(str) !== null) || lang
 }

@@ -10,7 +10,7 @@ test('addMessages', t => {
     t.true(repo.hasLocale('ko'))
 })
 
-test('no add if empty messages', t => {
+test('do not add empty messages', t => {
     const repo = new MessageRepo()
     t.false(repo.hasLocale('ko'))
     repo.addMessages('ko', {})
@@ -28,21 +28,21 @@ test('removeMessage - string', t => {
     const repo = removeStub()
     const removes = repo.removeMessages('ko')
     t.deepEqual(removes, ['ko'])
-    t.deepEqual(repo.getLocales(), ['en'])
+    t.deepEqual(repo.getAddedLocales(), ['en'])
 })
 
 test('removeMessage - string[]', t => {
     const repo = removeStub()
     const removes = repo.removeMessages(['ko', 'en'])
     t.deepEqual(removes, ['ko','en'])
-    t.deepEqual(repo.getLocales(), [])
+    t.deepEqual(repo.getAddedLocales(), [])
 })
 
 test('removeMessage - all', t => {
     const repo = removeStub()
     const removes = repo.removeMessages()
     t.deepEqual(removes, ['ko','en'])
-    t.deepEqual(repo.getLocales(), [])
+    t.deepEqual(repo.getAddedLocales(), [])
 })
 
 const findStub = () => {
