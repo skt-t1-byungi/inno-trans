@@ -27,7 +27,8 @@
     "license": "MIT",
     "scripts": {
         "test": "ava",
-        "build": "tsc && bili lib/index.js --format es,umd-min --no-js --no-map --moduleName InnoTrans"
+        "build": "tsc && bili lib/index.js --format es,umd-min --no-js --no-map --moduleName InnoTrans",
+        "prepublishOnly": "npm run build"
     },
     "devDependencies": {
         "ava": "^1.0.0-rc.1",
