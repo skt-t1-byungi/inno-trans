@@ -1,8 +1,8 @@
 {
     "name": "inno-trans",
+    "description": "simple localization library (inspired by laravel translation)",
     "version": "2.0.0-beta.2",
     "main": "lib/index.js",
-    "module": "dist/inno-trans.es.js",
     "unpkg": "dist/inno-trans.min.js",
     "types": "lib/index.d.ts",
     "author": {
@@ -27,7 +27,7 @@
     "license": "MIT",
     "scripts": {
         "test": "ava",
-        "build": "tsc && bili lib/index.js --format es,umd-min --no-js --no-map --moduleName InnoTrans",
+        "build": "tsc && bili lib/index.js --format umd-min --no-js --no-map --moduleName InnoTrans",
         "prepublishOnly": "npm run build"
     },
     "devDependencies": {
