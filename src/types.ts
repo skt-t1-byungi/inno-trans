@@ -3,9 +3,8 @@ import Translator from './Translator'
 
 interface Mappable<V> {[name: string]: V}
 
-type Value = string | number
-export type ValueMap = Mappable<Value>
-export type ValueFilter = (str: Value) => Value
+export type ValueMap = Mappable<any>
+export type ValueFilter = (value: any) => string | number
 export type ValueFilterMap = Mappable<ValueFilter>
 export type ValueFetcher = (template: string, values: ValueMap, filters: ValueFilterMap) => string
 
