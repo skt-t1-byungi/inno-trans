@@ -18,11 +18,11 @@ import {
     ValueFilterMap,
     ValueMap
 } from './types'
-import { assertType } from './util'
+import { assertType, getProp } from './util'
 
 export default class Translator {
-    public t: (key: string, values: ValueMap, opts: TransOptions) => string
-    public tc: (key: string, num: number, values: ValueMap, opts: TransOptions) => string
+    public t: (key: string, values?: ValueMap, opts?: TransOptions) => string
+    public tc: (key: string, num: number, values?: ValueMap, opts?: TransOptions) => string
 
     private _messageRepo = new MessageRepo()
     private _emitter = new EventEmitter()
@@ -131,22 +131,22 @@ export default class Translator {
     }
 
     public trans (key: string, values: ValueMap = {}, opts: TransOptions = {}) {
-        const locale = opts.locale || this._locale
+        const locale = getProp(opts, 'locale', this._locale)
 
         const message = this._findMessage(key, locale)
-        if (!message) return opts.defaults || key
+        if (!message) return getProp(opts, 'defaults', key)
 
         return this._format(message.template(), values, locale)
     }
 
     public transChoice (key: string, num: number, values: ValueMap = {}, opts: TransOptions = {}) {
-        const locale = opts.locale || this._locale
+        const locale = getProp(opts, 'locale', this._locale)
 
         const message = this._findMessage(key, locale)
-        if (!message) return opts.defaults || key
+        if (!message) return getProp(opts, 'defaults', key)
 
         const template = message.findPluralTemplate(num)
-        if (!template) return opts.defaults || key
+        if (!template) return getProp(opts, 'defaults', key)
 
         return this._format(template, values, locale)
     }
