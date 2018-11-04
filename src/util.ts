@@ -9,7 +9,7 @@ export function each<T extends object> (o: T, each: (v: T[keyof T], k: Extract<k
 }
 
 export function getProp<T extends object> (o: T, k: string, defaults: string) {
-    if (hasOwn(o, k) && typeof o[k] === 'string') return (o as Record<any, string>)[k]
+    if (hasOwn(o, k) && o[k] !== undefined) return o[k] as Exclude<T[typeof k], void>
     return defaults
 }
 
