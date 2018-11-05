@@ -2,9 +2,9 @@ export function hasOwn <T extends object> (o: T, k: string): k is Extract<keyof 
     return Object.prototype.hasOwnProperty.call(o, k)
 }
 
-export function each<T extends object> (o: T, each: (v: T[keyof T], k: Extract<keyof T, string>) => void) {
+export function each<T extends object> (o: T, fn: (v: T[keyof T], k: Extract<keyof T, string>) => void) {
     for (const k in o) {
-        if (hasOwn(o, k)) each(o[k], k)
+        if (hasOwn(o, k)) fn(o[k], k)
     }
 }
 

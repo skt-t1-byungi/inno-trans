@@ -36,36 +36,35 @@ export default class Translator {
         return this._messageRepo.getAddedLocales()
     }
 
-    public removeMessage (locale ?: string | string[]) {
+    public removeMessages (locale ?: string | string[]) {
         const locales = this._messageRepo.removeMessages(locale)
         return this
     }
 
-    public message (locale: string, templates: TemplateMap) {
+    public addMessages (locale: string, templates: TemplateMap) {
         this._messageRepo.addMessages(locale, templates)
         return this
     }
 
     public locale (locale?: string) {
-        if (locale === this._locale) return this
         if (!locale) return this._locale
         this._locale = locale
         return this
     }
 
-    public filter (name: string, filter: ValueFilter) {
+    public addFilter (name: string, filter: ValueFilter) {
         assertType('filter', filter, 'function')
         this._filters[name] = filter
         return this
     }
 
-    public formatter (formatter: Formatter) {
-        assertType('formatter', formatter, 'function')
-        this._formatters.push(formatter)
+    public addFormatters (formatters: Formatter | Formatter[]) {
+        if (typeof formatters === 'function') formatters = [formatters]
+        this._formatters = this._formatters.concat(formatters)
         return this
     }
 
-    public fallback (fallbacks?: string | string[]) {
+    public fallbacks (fallbacks?: string | string[]) {
         if (!fallbacks) return this._fallbacks
         if (typeof fallbacks === 'string') fallbacks = [fallbacks]
         this._fallbacks = fallbacks.slice(0)

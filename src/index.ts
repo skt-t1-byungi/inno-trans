@@ -5,37 +5,37 @@ import { each } from './util'
 
 interface TranslatorOptions {
     locale: string,
-    fallback: string[],
-    message: TemplateLocaleMap,
-    filter: ValueFilterMap,
+    fallbacks: string[],
+    messages: TemplateLocaleMap,
+    filters: ValueFilterMap,
     tag: [string, string],
-    formatter: Formatter[],
-    plugin: Plugin[]
+    formatters: Formatter[],
+    plugins: Plugin[]
 }
 
 export = function InnoTrans ({
     locale,
-    message = {},
-    fallback = [],
-    filter = {},
+    messages = {},
+    fallbacks = [],
+    filters = {},
     tag = ['{', '}'],
-    formatter = [],
-    plugin = []
+    formatters = [],
+    plugins = []
 }: Partial<TranslatorOptions> = {}) {
     const translator = new Translator()
     const locales: string[] = []
 
-    each(message, (templates, locale) => {
+    each(messages, (templates, locale) => {
         locales.push(locale)
-        translator.message(locale, templates)
+        translator.addMessages(locale, templates)
     })
 
-    each(filter, (filter, name) => translator.filter(name, filter))
-    for (const fn of formatter) translator.formatter(fn)
+    each(filters, (filter, name) => translator.addFilter(name, filter))
+    for (const fn of formatters) translator.addFormatters(fn)
 
     translator.locale(locale || detectLocale(locales))
-    translator.fallback(fallback)
-    translator.tag(tag).use(plugin)
+    translator.fallbacks(fallbacks)
+    translator.tag(tag).use(plugins)
 
     return translator
 }

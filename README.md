@@ -137,12 +137,11 @@ Converts interpolated messages. `values` used for interpolation, and `locale` wh
 }
 ```
 ```js
-t.formatter((str, values, locale) =>
-    str.replace(/<(\S+)>(.*?)<\/\1>/, '<$1 style="color:red">$2</$1>'))
+const toRedText = (str, values, locale) => str.replace(/<(\S+)>(.*?)<\/\1>/, '<$1 style="color:red">$2</$1>')
+t.addFormatters(toRedText)
 
 t.trans('welcome', {name: 'john'})
 // => <p style="color:red">welcome, john!</p>
-
 t.trans('hello', {name: 'john'})
 // => <div style="color:red">hello, john!</div>
 ```
@@ -154,8 +153,8 @@ Create InnoTrans instance.
 ```js
 trans({
     locale: 'en',
-    fallback: ['ko', 'ja'],
-    message: {
+    fallbacks: ['ko', 'ja'],
+    messages: {
         en: {
             'welcome': 'welcome, {name}!'
         },
@@ -167,11 +166,11 @@ trans({
         }
     },
     tag: ['{', '}'],
-    filter: {
+    filters: {
         upper: str => str.toUpperCase(),
         lower: str => str.toLowerCase(),
     },
-    formatter: [
+    formatters: [
         str => str + 😝
     ]
 })
@@ -179,12 +178,12 @@ trans({
 
 #### options
 - `locale` - Specifies locale. If not specified, it is automatically inferred. 'UNKNOWN' is specified when inferring fails.
-- `fallback` - Specifies another locale to look for messages that are not in the current locale.
-- `message` - Message resources.
+- `fallbacks` - Specifies another locale to look for messages that are not in the current locale.
+- `messages` - Message resources.
 - `tag` - Prefix and suffix for interpolation. Default `{}`.
-- `filter` - Function for converting interpolation values.
-- `formatter` - Function for converting interpolated message.
-- `plugin` - Plugin to use with.
+- `filters` - Function for converting interpolation values.
+- `formatters` - Function for converting interpolated message.
+- `plugins` - Plugin to use with.
 
 ### t.trans(key [, values [, options]])
 Returns a message that matches the key.
@@ -205,10 +204,10 @@ Returns a message that matches the key and the quantity number.
 ### t.locale([locale])
 If the `locale` argument exists, set a new locale. If not, it returns current locale.
 
-### t.fallback([fallbacks])
+### t.fallbacks([fallbacks])
 If the `fallbacks` argument exists, set a new fallbacks. If not, it returns current fallbacks.
 
-### t.message(locale, messages)
+### t.addMessages(locale, messages)
 Add messages.
 
 ```js
@@ -218,7 +217,7 @@ t.message('en', {
 })
 ```
 
-### t.removeMessage([locales])
+### t.removeMessages([locales])
 Remove messages. If no `locales` argument, remove all.
 
 ### t.getAddedLocales()
@@ -231,10 +230,10 @@ Set prefix and suffix for interpolation.
 t.tag(['<?=', '=>'])
 ```
 
-### t.filter(name, fn)
+### t.addFilter(name, fn)
 Add a filter function.
 
-### t.formatter(fn)
+### t.addFormatters(formatters)
 Add a formatter function.
 
 ### t.use(plugin)
