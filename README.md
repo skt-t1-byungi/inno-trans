@@ -147,9 +147,6 @@ t.trans('hello', {name: 'john'})
 // => <div style="color:red">hello, john!</div>
 ```
 
-## Events
-Supports events. see API for details.
-
 ## API
 ### trans(options)
 Create InnoTrans instance.
@@ -234,53 +231,11 @@ Set prefix and suffix for interpolation.
 t.tag(['<?=', '=>'])
 ```
 
-### t.isLoaded()
-Returns whether the `load` event fired.
-
 ### t.filter(name, fn)
 Add a filter function.
 
 ### t.formatter(fn)
 Add a formatter function.
-
-### t.on(event, listener)
-Add an event listener.
-
-#### `load` - When a message is prepared for the current language.
-
-```js
-const t = trans({locale: 'en'})
-t.on('load', () => render()) // It is fired after "asyncLoadMessage()"
-asyncLoadMessage().then(messages => t.message('en', messages))
-```
-
-#### `change` - When the current locale is changed.
-
-```js
-const t = trans({locale: 'en', message})
-t.on('change', locale => console.log(locale)) // => ko
-t.locale('ko')
-```
-
-#### `add` - When new messages are added
-
-```js
-t.on('add', locale => console.log(locale)) // => ko
-t.message('ko', messages)
-```
-
-#### `remove` - When the message is deleted.
-
-```js
-t.on('remove', locales => console.log(locales)) // => ['ko', 'en']
-t.removeMessage(['ko', 'en'])
-```
-
-### t.once(event, listener)
-Add an event listener. Runs once.
-
-### t.off(event [, listener])
-Remove the event listener. If no `listener` argument, remove all.
 
 ### t.use(plugin)
 Add a plugin.
