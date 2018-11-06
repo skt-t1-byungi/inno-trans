@@ -309,7 +309,7 @@ Add a plugin.
 
 ## Plugins
 - [inno-trans-korean-josa-plugin](https://github.com/skt-t1-byungi/inno-trans-korean-josa-plugin)
-- [inno-trans-react-node-plugin](https://github.com/skt-t1-byungi/inno-trans-react-node-plugin)
+- [inno-trans-react-element-plugin](https://github.com/skt-t1-byungi/inno-trans-react-element-plugin)
 
 ## License
 MIT
