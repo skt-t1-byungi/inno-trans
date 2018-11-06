@@ -1,4 +1,3 @@
-import includes from '@skt-t1-byungi/array-includes'
 import reduce from '@skt-t1-byungi/array-reduce'
 import makeFetcher from './makeFetcher'
 import MessageRepo from './MessageRepo'
@@ -12,7 +11,7 @@ import {
     ValueFilterMap,
     ValueMap
 } from './types'
-import { assertType, getProp } from './util'
+import { assertType, each, getProp } from './util'
 
 export interface ITranslator {
     getAddedLocales (): string[]
@@ -40,6 +39,7 @@ export default class Translator implements ITranslator {
     private _fetcher!: ValueFetcher
     private _fallbacks: string[] = []
     private _filters: ValueFilterMap = {}
+    private _commonFilters: ValueFilter[] = []
     private _formatters: Formatter[] = []
     private _fetchFormatter: Formatter
 
@@ -77,7 +77,11 @@ export default class Translator implements ITranslator {
 
     public addFilter (name: string, filter: ValueFilter) {
         assertType('filter', filter, 'function')
-        this._filters[name] = filter
+        if (name === '*') {
+            this._commonFilters.push(filter)
+        } else {
+            this._filters[name] = filter
+        }
         return this
     }
 
@@ -135,8 +139,19 @@ export default class Translator implements ITranslator {
     }
 
     private _format (template: string, values: ValueMap, locale: string) {
+        values = this._applyCommonFilters(values)
         const formatters = [this._fetchFormatter, escapeFormatter, ...this._formatters]
         return reduce(formatters, (str, format) => format(str, values, locale), template)
+    }
+
+    private _applyCommonFilters (values: ValueMap) {
+        if (this._commonFilters.length === 0) return values
+
+        const newValues: ValueMap = {}
+        each(values, (val, k) => {
+            newValues[k] = reduce(this._commonFilters, (v, filter) => filter(v), val)
+        })
+        return newValues
     }
 }
 
