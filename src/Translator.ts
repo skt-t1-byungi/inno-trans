@@ -28,7 +28,7 @@ export default class Translator implements ITranslator {
     private _fetchFormatter: Formatter
 
     constructor () {
-        this._fetchFormatter = (template, values) => this._fetcher(template, values, this._filters)
+        this._fetchFormatter = (template, values) => this._fetcher(template, values, this._filters, this._commonFilters)
         this.t = (key, values, opts) => this.trans(key, values, opts)
         this.tc = (key, numb, values, opts) => this.transChoice(key, numb, values, opts)
     }
@@ -123,19 +123,8 @@ export default class Translator implements ITranslator {
     }
 
     private _format (template: string, values: ValueMap, locale: string) {
-        values = this._applyCommonFilters(values)
         const formatters = [this._fetchFormatter, escapeFormatter, ...this._formatters]
         return reduce(formatters, (str, format) => format(str, values, locale), template)
-    }
-
-    private _applyCommonFilters (values: ValueMap) {
-        if (this._commonFilters.length === 0) return values
-
-        const newValues: ValueMap = {}
-        each(values, (val, k) => {
-            newValues[k] = reduce(this._commonFilters, (v, filter) => filter(v), val)
-        })
-        return newValues
     }
 }
 

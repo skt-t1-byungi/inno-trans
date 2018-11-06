@@ -6,7 +6,8 @@ interface Mappable<V> {[name: string]: V}
 export type ValueMap = Mappable<any>
 export type ValueFilter = (value: any) => string | number
 export type ValueFilterMap = Mappable<ValueFilter>
-export type ValueFetcher = (template: string, values: ValueMap, filters: ValueFilterMap) => string
+export type ValueFetcher = (
+    template: string, values: ValueMap, filters: ValueFilterMap, commonFilters: ValueFilter[]) => string
 
 type Template = string
 export type TemplateMap = Mappable<Template>

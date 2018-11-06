@@ -9,7 +9,7 @@ const filters: ValueFilterMap = {
 }
 
 test('fetch values', t => {
-    const m = (str: string, values: {}) => fetch(str, values, {})
+    const m = (str: string, values: {}) => fetch(str, values, {}, [])
 
     t.is(m('abc {val}', { val: 123 }), 'abc 123')
     t.is(m('abc {val} }{', { val: 'test' }), 'abc test }{')
@@ -18,7 +18,7 @@ test('fetch values', t => {
 })
 
 test('filter', t => {
-    const m = (str: string, values: {}) => fetch(str, values, filters)
+    const m = (str: string, values: {}) => fetch(str, values, filters, [])
 
     t.is(m('abc {val|test} def', { val: 123 }), 'abc 2 def')
     t.is(m('abc {val |repeat } def', { val: 123 }), 'abc 123123 def')
@@ -31,7 +31,7 @@ test('filter', t => {
 
 test('other tag - <?= key => ',t => {
     const fetch = makeFetcher('<?=', '=>')
-    const m = (str: string, values: {}) => fetch(str, values, filters)
+    const m = (str: string, values: {}) => fetch(str, values, filters, [])
 
     t.is(m('abc <?=val=>', { val: 'def' }), 'abc def')
     t.is(m('abc <?=val| repeat=>', { val: 'def' }), 'abc defdef')
