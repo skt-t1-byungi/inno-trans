@@ -20,7 +20,7 @@ export type Plugin = (t: Translator) => void
 
 export type TransOptions = Partial<{locale: string, defaults: string}>
 
-export interface Translator {
+export interface ITranslator {
     getAddedLocales (): string[]
     hasMessage (locale: string, key?: string): boolean
     removeMessages (locales?: string | string[]): this
