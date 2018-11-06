@@ -1,5 +1,5 @@
 import find from '@skt-t1-byungi/array-find'
-import Translator from './Translator'
+import Translator, { ITranslator } from './Translator'
 import { Formatter, Plugin, TemplateLocaleMap, ValueFilterMap } from './types'
 import { each } from './util'
 
@@ -21,7 +21,7 @@ export = function InnoTrans ({
     tag = ['{', '}'],
     formatters = [],
     plugins = []
-}: Partial<TranslatorOptions> = {}) {
+}: Partial<TranslatorOptions> = {}): ITranslator {
     const translator = new Translator()
     const locales: string[] = []
 
