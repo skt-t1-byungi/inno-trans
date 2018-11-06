@@ -283,7 +283,9 @@ Returns true if the message exists.
 
 ```js
 t.hasMessage('ko') // => false
+
 t.addMessages('ko', {hello: '안녕!'})
+
 t.hasMessage('ko') // => true
 t.hasMessage('ko', 'hello') // => true
 t.hasMessage('ko', 'others') // => false
@@ -306,8 +308,8 @@ Add a formatter function.
 Add a plugin.
 
 ## Plugins
-[inno-trans-korean-josa-plugin](https://github.com/skt-t1-byungi/inno-trans-korean-josa-plugin)
-[inno-trans-react-node-plugin](https://github.com/skt-t1-byungi/inno-trans-react-node-plugin)
+- [inno-trans-korean-josa-plugin](https://github.com/skt-t1-byungi/inno-trans-korean-josa-plugin)
+- [inno-trans-react-node-plugin](https://github.com/skt-t1-byungi/inno-trans-react-node-plugin)
 
 ## License
 MIT
