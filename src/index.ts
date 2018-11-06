@@ -31,7 +31,7 @@ export = function InnoTrans ({
     })
 
     each(filters, (filter, name) => translator.addFilter(name, filter))
-    for (const fn of formatters) translator.addFormatters(fn)
+    for (const fn of formatters) translator.addFormatter(fn)
 
     translator.locale(locale || detectLocale(locales))
     translator.fallbacks(fallbacks)

@@ -5,16 +5,23 @@ const stubMessages = { a: '', b: '', c: '' }
 
 test('addMessages', t => {
     const repo = new MessageRepo()
-    t.false(repo.hasLocale('ko'))
+    t.false(repo.hasMessage('ko'))
     repo.addMessages('ko', stubMessages)
-    t.true(repo.hasLocale('ko'))
+    t.true(repo.hasMessage('ko'))
 })
 
 test('do not add empty messages', t => {
     const repo = new MessageRepo()
-    t.false(repo.hasLocale('ko'))
+    t.false(repo.hasMessage('ko'))
     repo.addMessages('ko', {})
-    t.false(repo.hasLocale('ko'))
+    t.false(repo.hasMessage('ko'))
+})
+
+test('hasMessage by key', t => {
+    const repo = new MessageRepo()
+    t.false(repo.hasMessage('ko', 'a'))
+    repo.addMessages('ko', stubMessages)
+    t.true(repo.hasMessage('ko', 'a'))
 })
 
 const removeStub = () => {
@@ -24,24 +31,21 @@ const removeStub = () => {
     return repo
 }
 
-test('removeMessage - string', t => {
+test('removeMessages - string', t => {
     const repo = removeStub()
-    const removes = repo.removeMessages('ko')
-    t.deepEqual(removes, ['ko'])
+    repo.removeMessages('ko')
     t.deepEqual(repo.getAddedLocales(), ['en'])
 })
 
-test('removeMessage - string[]', t => {
+test('removeMessages - string[]', t => {
     const repo = removeStub()
-    const removes = repo.removeMessages(['ko', 'en'])
-    t.deepEqual(removes, ['ko','en'])
+    repo.removeMessages(['ko', 'en'])
     t.deepEqual(repo.getAddedLocales(), [])
 })
 
-test('removeMessage - all', t => {
+test('removeMessages - all', t => {
     const repo = removeStub()
-    const removes = repo.removeMessages()
-    t.deepEqual(removes, ['ko','en'])
+    repo.removeMessages()
     t.deepEqual(repo.getAddedLocales(), [])
 })
 

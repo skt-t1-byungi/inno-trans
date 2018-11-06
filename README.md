@@ -80,13 +80,13 @@ t.transChoice('apples', 20) // => many
 ### with Interpolation
 ```json
 {
-    "apples": "{0}none (0)|[1,19]some ({count})|[20,*]many ({count})"
+    "apples": "{0}none : {count}|[1,19]some : {count}|[20,*]many : {count}"
 }
 ```
 ```js
-t.transChoice('apples', 0, {count:0}) // => none (0)
-t.transChoice('apples', 10, {count:10}) // => some (10)
-t.transChoice('apples', 20, {count:20}) // => many (20)
+t.transChoice('apples', 0, {count:0}) // => none : 0
+t.transChoice('apples', 10, {count:10}) // => some : 10
+t.transChoice('apples', 20, {count:20}) // => many : 20
 ```
 
 ## Fallback
@@ -106,13 +106,15 @@ Fallback a different locale when there is no message.
 ```js
 t.trans('index.hello') // => index.hello
 t.trans('index.welcome') // => index.welcome
-t.fallback(['ko', 'ja'])
+
+t.fallbacks(['ko', 'ja'])
+
 t.trans('index.hello') // => 안녕~
 t.trans('index.welcome') // => 歓迎よ~
 ```
 
 ## Filter
-You can write in the message a filter function that converts the value.
+You can write in the message a filter that converts the value.
 ```json
 {
     "welcome": "welcome, {name|upper}!",
@@ -120,8 +122,8 @@ You can write in the message a filter function that converts the value.
 }
 ```
 ```js
-t.filter('upper', str => str.toUpperCase())
-t.filter('lower', str => str.toLowerCase())
+t.addFilter('upper', str => str.toUpperCase())
+t.addFilter('lower', str => str.toLowerCase())
 
 t.trans('welcome', {name: 'John'}) // => welcome JOHN!
 t.trans('hello', {name: 'John'}) // => hello john!
@@ -138,7 +140,7 @@ Converts interpolated messages. `values` used for interpolation, and `locale` wh
 ```
 ```js
 const toRedText = (str, values, locale) => str.replace(/<(\S+)>(.*?)<\/\1>/, '<$1 style="color:red">$2</$1>')
-t.addFormatters(toRedText)
+t.addFormatter(toRedText)
 
 t.trans('welcome', {name: 'john'})
 // => <p style="color:red">welcome, john!</p>
@@ -193,13 +195,13 @@ Returns a message that matches the key.
 - `defaults` - String to return when the message does not exist. If not, a key is returned.
 
 #### Short method
-`t.t(key [, values [, options]])`
+*`t.t(key [, values [, options]])`*
 
 ### t.transChoice(key, number [, values [, options]])
 Returns a message that matches the key and the quantity number.
 
 #### Short method
-`t.tc(key [, values [, options]])`
+*`t.tc(key [, values [, options]])`*
 
 ### t.locale([locale])
 If the `locale` argument exists, set a new locale. If not, it returns current locale.
@@ -211,7 +213,7 @@ If the `fallbacks` argument exists, set a new fallbacks. If not, it returns curr
 Add messages.
 
 ```js
-t.message('en', {
+t.addMessages('en', {
     'welcome': 'Welcome, {name}!',
     'hello': 'hello, {name}!'
 })
@@ -223,6 +225,9 @@ Remove messages. If no `locales` argument, remove all.
 ### t.getAddedLocales()
 Returns the added message locales.
 
+### t.hasMessage(locale [, key])
+Returns true if the message exists.
+
 ### t.tag(tag)
 Set prefix and suffix for interpolation.
 
@@ -233,7 +238,7 @@ t.tag(['<?=', '=>'])
 ### t.addFilter(name, fn)
 Add a filter function.
 
-### t.addFormatters(formatters)
+### t.addFormatter(formatter)
 Add a formatter function.
 
 ### t.use(plugin)

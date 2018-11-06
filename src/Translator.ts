@@ -36,8 +36,12 @@ export default class Translator {
         return this._messageRepo.getAddedLocales()
     }
 
+    public hasMessage (locale: string, key?: string) {
+        return this._messageRepo.hasMessage(locale, key)
+    }
+
     public removeMessages (locale ?: string | string[]) {
-        const locales = this._messageRepo.removeMessages(locale)
+        this._messageRepo.removeMessages(locale)
         return this
     }
 
@@ -47,7 +51,7 @@ export default class Translator {
     }
 
     public locale (locale?: string) {
-        if (!locale) return this._locale
+        if (locale === undefined) return this._locale
         this._locale = locale
         return this
     }
@@ -58,14 +62,14 @@ export default class Translator {
         return this
     }
 
-    public addFormatters (formatters: Formatter | Formatter[]) {
-        if (typeof formatters === 'function') formatters = [formatters]
-        this._formatters = this._formatters.concat(formatters)
+    public addFormatter (formatter: Formatter) {
+        assertType('formatter', formatter, 'function')
+        this._formatters.push(formatter)
         return this
     }
 
     public fallbacks (fallbacks?: string | string[]) {
-        if (!fallbacks) return this._fallbacks
+        if (fallbacks === undefined) return this._fallbacks
         if (typeof fallbacks === 'string') fallbacks = [fallbacks]
         this._fallbacks = fallbacks.slice(0)
         return this
@@ -94,7 +98,7 @@ export default class Translator {
         if (!message) return getProp(opts, 'defaults', key)
 
         const template = message.findPluralTemplate(num)
-        if (!template) return getProp(opts, 'defaults', key)
+        if (template === null) return getProp(opts, 'defaults', key)
 
         return this._format(template, values, locale)
     }

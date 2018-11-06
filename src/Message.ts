@@ -19,6 +19,6 @@ export default class Message {
 
     public findPluralTemplate (num: number) {
         const plural = find(this.plurals(), (({ min, max }) => min <= num && num <= max))
-        return plural && plural.value
+        return plural ? plural.value : null
     }
 }

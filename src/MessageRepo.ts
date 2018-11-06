@@ -8,12 +8,10 @@ export default class MessageRepo {
 
     public addMessages (locale: string, templates: TemplateMap) {
         const templateEntries = entries(templates)
-        if (templateEntries.length === 0) return 0
+        if (templateEntries.length === 0) return
 
         const messages = this._repo[locale] || (this._repo[locale] = {})
         for (const [k, template] of templateEntries) messages[k] = new Message(template)
-
-        return templateEntries.length
     }
 
     public getAddedLocales () {
@@ -22,32 +20,25 @@ export default class MessageRepo {
         return locales
     }
 
-    public removeMessages (locales?: string | string[]): string[] {
+    public removeMessages (locales?: string | string[]) {
         if (locales === undefined) {
-            const removes = this.getAddedLocales()
             this._repo = {}
-            return removes
+            return
         }
 
-        if (typeof locales === 'string') {
-            if (!this.hasLocale(locales)) return []
-            delete this._repo[locales]
-            return [locales]
-        }
-
-        locales = filter(locales, locale => this.hasLocale(locale))
+        if (typeof locales === 'string') locales = [locales]
         for (const locale of locales) delete this._repo[locale]
-
-        return locales
     }
 
-    public hasLocale (locale: string) {
-        return hasOwn(this._repo, locale)
+    public hasMessage (locale: string, key?: string) {
+        if (!hasOwn(this._repo, locale)) return false
+        if (key === undefined) return true
+        return hasOwn(this._repo[locale], key)
     }
 
     public findMessage (locales: string[], key: string) {
         for (const locale of locales) {
-            if (!this.hasLocale(locale)) continue
+            if (!this.hasMessage(locale)) continue
 
             const messages = this._repo[locale]
             if (hasOwn(messages, key)) return messages[key]
