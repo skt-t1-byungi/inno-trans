@@ -19,3 +19,20 @@ export type Formatter = (template: string, values: ValueMap, locale: string) => 
 export type Plugin = (t: Translator) => void
 
 export type TransOptions = Partial<{locale: string, defaults: string}>
+
+export interface Translator {
+    getAddedLocales (): string[]
+    hasMessage (locale: string, key?: string): boolean
+    removeMessages (locales?: string | string[]): this
+    addMessages (locale: string, templates: TemplateMap): this
+    locale (): string
+    locale (locale: string): this
+    addFilter (name: string, filter: ValueFilter): this
+    addFormatter (formatter: Formatter): this
+    fallbacks (): string[]
+    fallbacks (fallbacks: string | string[]): this
+    tag ([prefix, suffix]: [string, string]): this
+    trans (key: string, values: ValueMap, opts: TransOptions): string
+    transChoice (key: string, num: number, values: ValueMap, opts: TransOptions): string
+    use (plugins: Plugin | Plugin[]): this
+}

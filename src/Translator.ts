@@ -3,6 +3,7 @@ import makeFetcher from './makeFetcher'
 import MessageRepo from './MessageRepo'
 import {
     Formatter,
+    ITranslator,
     Plugin,
     TemplateMap,
     TransOptions,
@@ -12,23 +13,6 @@ import {
     ValueMap
 } from './types'
 import { assertType, each, getProp } from './util'
-
-export interface ITranslator {
-    getAddedLocales (): string[]
-    hasMessage (locale: string, key?: string): boolean
-    removeMessages (locales?: string | string[]): this
-    addMessages (locale: string, templates: TemplateMap): this
-    locale (): string
-    locale (locale: string): this
-    addFilter (name: string, filter: ValueFilter): this
-    addFormatter (formatter: Formatter): this
-    fallbacks (): string[]
-    fallbacks (fallbacks: string | string[]): this
-    tag ([prefix, suffix]: [string, string]): this
-    trans (key: string, values: ValueMap, opts: TransOptions): string
-    transChoice (key: string, num: number, values: ValueMap, opts: TransOptions): string
-    use (plugins: Plugin | Plugin[]): this
-}
 
 export default class Translator implements ITranslator {
     public t: (key: string, values?: ValueMap, opts?: TransOptions) => string

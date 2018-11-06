@@ -1,6 +1,6 @@
 import find from '@skt-t1-byungi/array-find'
-import Translator, { ITranslator } from './Translator'
-import { Formatter, Plugin, TemplateLocaleMap, ValueFilterMap } from './types'
+import Translator from './Translator'
+import { Formatter, ITranslator, Plugin, TemplateLocaleMap, ValueFilterMap } from './types'
 import { each } from './util'
 
 interface TranslatorOptions {
