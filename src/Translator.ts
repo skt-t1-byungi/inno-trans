@@ -40,8 +40,8 @@ export default class Translator {
         return this._messageRepo.hasMessage(locale, key)
     }
 
-    public removeMessages (locale ?: string | string[]) {
-        this._messageRepo.removeMessages(locale)
+    public removeMessages (locales ?: string | string[]) {
+        this._messageRepo.removeMessages(locales)
         return this
     }
 
@@ -50,6 +50,8 @@ export default class Translator {
         return this
     }
 
+    public locale (): string
+    public locale (locale: string): this
     public locale (locale?: string) {
         if (locale === undefined) return this._locale
         this._locale = locale
@@ -68,6 +70,8 @@ export default class Translator {
         return this
     }
 
+    public fallbacks (): string[]
+    public fallbacks (fallbacks: string | string[]): this
     public fallbacks (fallbacks?: string | string[]) {
         if (fallbacks === undefined) return this._fallbacks
         if (typeof fallbacks === 'string') fallbacks = [fallbacks]

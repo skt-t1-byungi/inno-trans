@@ -1,6 +1,23 @@
 # inno-trans
 📜 simple localization library (inspired by laravel translation)
 
+[![npm](https://img.shields.io/npm/v/inno-trans.svg?style=flat-square)](https://www.npmjs.com/package/inno-trans)
+[![npm](https://img.shields.io/npm/dt/inno-trans.svg?style=flat-square)](https://www.npmjs.com/package/inno-trans)
+
+## Example
+```js
+const t = trans({
+    locale: 'en',
+    message: {
+        en: {
+            'hello': 'hello world!'
+        }
+    }
+})
+
+t.trans('hello') // => hello world!
+```
+
 ## Install
 ```sh
 yarn add inno-trans
@@ -18,20 +35,6 @@ const trans = require('inno-trans');
 <script>
  var trans = InnoTrans;
 </script>
-```
-
-## Example
-```js
-const t = trans({
-    locale: 'en',
-    message: {
-        en: {
-            'hello': 'hello world!'
-        }
-    }
-})
-
-t.trans('hello') // => hello world!
 ```
 
 ## Interpolation
@@ -179,7 +182,7 @@ trans({
 ```
 
 #### options
-- `locale` - Specifies locale. If not specified, it is automatically inferred. 'UNKNOWN' is specified when inferring fails.
+- `locale` - Specifies locale. If not specified, it is automatically inferred. `UNKNOWN` is specified when inferring fails.
 - `fallbacks` - Specifies another locale to look for messages that are not in the current locale.
 - `messages` - Message resources.
 - `tag` - Prefix and suffix for interpolation. Default `{}`.
@@ -194,20 +197,58 @@ Returns a message that matches the key.
 - `locale` - Specifies the locale. The current locale is ignored.
 - `defaults` - String to return when the message does not exist. If not, a key is returned.
 
-#### Short method
-*`t.t(key [, values [, options]])`*
+```js
+const t = trans({
+    locale: 'en',
+    messages: {
+        en: { hello: 'hello!' },
+        ko: { hello: '안녕!' }
+    }
+})
+
+t.trans('welcome') // => welcome
+t.trans('welcome', undefined, {defaults: 'Welcome~!'}) // => Welcome~!
+t.trans('hello') // => hello!
+t.trans('hello', undefined, {locale: 'ko'}) // => 안녕
+```
+
+Supports short method name.
+
+```js
+t.t('hello', {name: 'john'})
+```
 
 ### t.transChoice(key, number [, values [, options]])
 Returns a message that matches the key and the quantity number.
 
-#### Short method
-*`t.tc(key [, values [, options]])`*
+```js
+t.addMessages('en', {bought: 'I bought one|I bought many things!'})
+
+t.transChoice('bought', 1) // => I bought one
+t.transChoice('bought', 10) // => I bought many things!
+```
+
+Supports short method name.
+
+```js
+t.tc('apples', 3, {count: 3});
+```
 
 ### t.locale([locale])
 If the `locale` argument exists, set a new locale. If not, it returns current locale.
 
+```js
+t.locale('ko') // Change locale to "ko".
+t.locale() // => 'ko'
+```
+
 ### t.fallbacks([fallbacks])
 If the `fallbacks` argument exists, set a new fallbacks. If not, it returns current fallbacks.
+
+```js
+t.fallbacks(['ko', 'ja']) // Change fallback locale to "ko" and "ja".
+t.fallbacks() // => ['ko', 'ja']
+```
 
 ### t.addMessages(locale, messages)
 Add messages.
@@ -222,11 +263,31 @@ t.addMessages('en', {
 ### t.removeMessages([locales])
 Remove messages. If no `locales` argument, remove all.
 
+```js
+t.removeMessages('en')
+t.removeMessages(['ko', 'ja'])
+t.removeMessages() // Warning! Remove all.
+```
+
 ### t.getAddedLocales()
 Returns the added message locales.
 
+```js
+t.getAddedLocales() // => ['en', 'ko', 'ja']
+t.removeMessages('en')
+t.getAddedLocales() // => ['ko', 'ja']
+```
+
 ### t.hasMessage(locale [, key])
 Returns true if the message exists.
+
+```js
+t.hasMessage('ko') // => false
+t.addMessages('ko', {hello: '안녕!'})
+t.hasMessage('ko') // => true
+t.hasMessage('ko', 'hello') // => true
+t.hasMessage('ko', 'others') // => false
+```
 
 ### t.tag(tag)
 Set prefix and suffix for interpolation.
@@ -235,7 +296,7 @@ Set prefix and suffix for interpolation.
 t.tag(['<?=', '=>'])
 ```
 
-### t.addFilter(name, fn)
+### t.addFilter(name, filter)
 Add a filter function.
 
 ### t.addFormatter(formatter)
@@ -243,6 +304,10 @@ Add a formatter function.
 
 ### t.use(plugin)
 Add a plugin.
+
+## Plugins
+[inno-trans-korean-josa-plugin](https://github.com/skt-t1-byungi/inno-trans-korean-josa-plugin)
+[inno-trans-react-node-plugin](https://github.com/skt-t1-byungi/inno-trans-react-node-plugin)
 
 ## License
 MIT
