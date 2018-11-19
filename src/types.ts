@@ -33,7 +33,7 @@ export interface ITranslator {
     fallbacks (): string[]
     fallbacks (fallbacks: string | string[]): this
     tag ([prefix, suffix]: [string, string]): this
-    trans (key: string, values: ValueMap, opts: TransOptions): string
-    transChoice (key: string, num: number, values: ValueMap, opts: TransOptions): string
+    trans (key: string, values?: ValueMap, opts?: TransOptions): string
+    transChoice (key: string, num: number, values?: ValueMap, opts?: TransOptions): string
     use (plugins: Plugin | Plugin[]): this
 }
