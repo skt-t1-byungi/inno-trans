@@ -13,7 +13,11 @@ interface TranslatorOptions {
     plugins: Plugin[]
 }
 
-export = function InnoTrans ({
+const registeredPlugins: Plugin[] = []
+
+export = InnoTrans
+
+function InnoTrans ({
     locale,
     messages = {},
     fallbacks = [],
@@ -35,9 +39,14 @@ export = function InnoTrans ({
 
     translator.locale(locale || detectLocale(locales))
     translator.fallbacks(fallbacks)
-    translator.tag(tag).use(plugins)
+    translator.tag(tag).use(registeredPlugins.concat(plugins))
 
     return translator
+}
+
+InnoTrans.use = (plugin: Plugin) => {
+    registeredPlugins.push(plugin)
+    return InnoTrans
 }
 
 function detectLocale (locales: string[]) {
