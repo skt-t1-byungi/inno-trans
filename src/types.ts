@@ -17,7 +17,7 @@ type MessageMap = Mappable<Message>
 export type MessageLocaleMap = Mappable<MessageMap>
 
 export type Formatter = (template: string, values: ValueMap, locale: string) => string
-export type Plugin = (t: Translator) => void
+export type Plugin = (t: ITranslator) => void
 
 export type TransOptions = Partial<{locale: string, defaults: string}>
 
