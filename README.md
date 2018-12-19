@@ -6,7 +6,7 @@
 
 ## Example
 ```js
-const t = trans({
+const t = InnoTrans({
     locale: 'en',
     message: {
         en: {
@@ -23,17 +23,14 @@ t.trans('hello') // => hello world!
 yarn add inno-trans
 ```
 ```js
-//es6
-import trans from "inno-trans";
-
-//commonjs
-const trans = require('inno-trans');
+const InnoTrans = require('inno-trans');
+const t = InnoTrans({...})
 ```
 ### browser
 ```html
 <script src="https://unpkg.com/inno-trans"></script>
 <script>
- var trans = InnoTrans;
+ var t = InnoTrans({...});
 </script>
 ```
 
@@ -198,7 +195,7 @@ Returns a message that matches the key.
 - `defaults` - String to return when the message does not exist. If not, a key is returned.
 
 ```js
-const t = trans({
+const t = InnoTrans({
     locale: 'en',
     messages: {
         en: { hello: 'hello!' },

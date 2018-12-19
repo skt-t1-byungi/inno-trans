@@ -51,7 +51,7 @@ InnoTrans.use = (plugin: Plugin) => {
 
 function detectLocale (locales: string[]) {
     let lang: string | void
-    if (process.env) {
+    if (process && process.env) {
         lang = process.env.LC_ALL || process.env.LC_MESSAGES || process.env.LANG || process.env.LANGUAGE
     } else if (navigator) {
         lang = navigator.language || (navigator as (Navigator & { userLanguage: string })).userLanguage
