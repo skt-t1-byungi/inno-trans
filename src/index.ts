@@ -1,4 +1,4 @@
-import find from '@skt-t1-byungi/array-find'
+import find = require('@skt-t1-byungi/array-find')
 import Translator from './Translator'
 import { Formatter, ITranslator, Plugin, TemplateLocaleMap, ValueFilterMap } from './types'
 import { each } from './util'

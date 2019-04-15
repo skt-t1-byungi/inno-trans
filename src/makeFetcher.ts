@@ -1,9 +1,10 @@
-import reduce from '@skt-t1-byungi/array-reduce'
+import reduce = require('@skt-t1-byungi/array-reduce')
 import { ValueFetcher } from './types'
 import { hasOwn } from './util'
 
+// tslint:disable-next-line:cognitive-complexity
 export default function makeFetcher (prefix: string, suffix: string): ValueFetcher {
-    const regex = new RegExp(`\\\\?${e(prefix)}\\s*([^\\s|]+?)\\s*((?:\\|\\s*[^\\s|]+\\s*)*)${e(suffix)}`, 'g')
+    const regex = new RegExp(`\\\\?${escape(prefix)}\\s*([^\\s|]+?)\\s*((?:\\|\\s*[^\\s|]+\\s*)*)${escape(suffix)}`, 'g')
 
     return (template, values, filters, commonFilters) => {
         const replacer = (match: string, key: string, filterStr: string) => {
@@ -28,7 +29,7 @@ export default function makeFetcher (prefix: string, suffix: string): ValueFetch
     }
 }
 
-function e (str: string) {
+function escape (str: string) {
     return str.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
 }
 

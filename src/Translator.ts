@@ -1,4 +1,4 @@
-import reduce from '@skt-t1-byungi/array-reduce'
+import reduce = require('@skt-t1-byungi/array-reduce')
 import makeFetcher from './makeFetcher'
 import MessageRepo from './MessageRepo'
 import {

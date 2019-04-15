@@ -1,4 +1,4 @@
-import map from '@skt-t1-byungi/array-map'
+import map = require('@skt-t1-byungi/array-map')
 
 export interface PluralTemplate {min: number, max: number, value: string}
 

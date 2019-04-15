@@ -6,11 +6,7 @@
         "declaration": true,
         "outDir": "./lib",
         "strict": true,
-        "importHelpers": true,
-        "esModuleInterop": true,
-        "strictFunctionTypes": true,
-        "strictNullChecks": true,
-        "strictBindCallApply": true
+        "importHelpers": true
     },
     "include": [
         "src/**/*"

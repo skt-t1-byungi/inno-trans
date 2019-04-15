@@ -1,4 +1,4 @@
-import find from '@skt-t1-byungi/array-find'
+import find = require('@skt-t1-byungi/array-find')
 import parsePlurals, { PluralTemplate } from './parsePlurals'
 
 export default class Message {

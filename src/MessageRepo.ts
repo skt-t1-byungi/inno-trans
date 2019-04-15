@@ -1,4 +1,3 @@
-import filter from '@skt-t1-byungi/array-filter'
 import Message from './Message'
 import { MessageLocaleMap, TemplateMap } from './types'
 import { each, entries, hasOwn } from './util'
