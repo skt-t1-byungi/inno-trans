@@ -18,7 +18,7 @@ export type MessageLocaleMap = Mappable<MessageMap>
 export type Formatter = (template: string, values: ValueMap, locale: string) => string
 export type Plugin = (t: ITranslator) => void
 
-export type TransOptions = Partial<{locale: string, defaults: string}>
+export type TransOptions<Defaults= string> = Partial<{locale: string, defaults: Defaults}>
 
 export interface ITranslator {
     getAddedLocales (): string[]
@@ -32,7 +32,7 @@ export interface ITranslator {
     fallbacks (): string[]
     fallbacks (fallbacks: string | string[]): this
     tag ([prefix, suffix]: [string, string]): this
-    trans (key: string, values?: ValueMap, opts?: TransOptions): string
-    transChoice (key: string, num: number, values?: ValueMap, opts?: TransOptions): string
+    trans<Defaults= string> (key: string, values?: ValueMap, opts?: TransOptions<Defaults>): string | Defaults
+    transChoice<Defaults= string> (key: string, num: number, values?: ValueMap, opts?: TransOptions<Defaults>): string | Defaults
     use (plugins: Plugin | Plugin[]): this
 }

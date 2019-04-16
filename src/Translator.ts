@@ -16,8 +16,8 @@ import {
 import { assertType, each, getProp } from './util'
 
 export default class Translator implements ITranslator {
-    public t: (key: string, values?: ValueMap, opts?: TransOptions) => string
-    public tc: (key: string, num: number, values?: ValueMap, opts?: TransOptions) => string
+    public t: <Defaults= string> (key: string, values?: ValueMap, opts?: TransOptions<Defaults>) => string | Defaults
+    public tc: <Defaults= string> (key: string, num: number, values?: ValueMap, opts?: TransOptions<Defaults>) => string | Defaults
 
     private _ee = new EventEmitter()
     private _messageRepo = new MessageRepo()
@@ -126,7 +126,7 @@ export default class Translator implements ITranslator {
         return this
     }
 
-    public trans (key: string, values: ValueMap = {}, opts: TransOptions = {}) {
+    public trans <Defaults= string> (key: string, values: ValueMap = {}, opts: TransOptions<Defaults> = {}) {
         const locale = getProp(opts, 'locale', this._locale)
 
         const message = this._findMessage(key, locale)
@@ -135,7 +135,7 @@ export default class Translator implements ITranslator {
         return this._format(message.template(), values, locale)
     }
 
-    public transChoice (key: string, num: number, values: ValueMap = {}, opts: TransOptions = {}) {
+    public transChoice <Defaults= string> (key: string, num: number, values: ValueMap = {}, opts: TransOptions <Defaults> = {}) {
         const locale = getProp(opts, 'locale', this._locale)
 
         const message = this._findMessage(key, locale)

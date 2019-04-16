@@ -57,3 +57,9 @@ test('changeFallbacks event', t => {
     trans.fallbacks(['b'])
     trans.fallbacks(['a', 'b'])
 })
+
+test('Other types of default', t => {
+    const trans = new Translator()
+    const obj = {}
+    t.is(trans.t('test', undefined, { defaults: obj }), obj)
+})
