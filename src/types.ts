@@ -1,5 +1,4 @@
 import Message from './Message'
-import Translator from './Translator'
 
 interface Mappable<V> {[name: string]: V}
 
