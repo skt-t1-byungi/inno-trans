@@ -42,7 +42,6 @@
         "typescript": "^3.4.3"
     },
     "dependencies": {
-        "@skt-t1-byungi/array-filter": "^0.2.0",
         "@skt-t1-byungi/array-find": "^0.2.0",
         "@skt-t1-byungi/array-map": "^0.2.0",
         "@skt-t1-byungi/array-reduce": "^0.2.1"
