@@ -2,8 +2,8 @@ import map = require('@skt-t1-byungi/array-map')
 
 export interface PluralTemplate {min: number, max: number, value: string}
 
-export default function parsePlurals (txt: string): PluralTemplate[] {
-    const templates = txt.match(/(?:({[^}]*})|(\\\|)|([^|]))+/g) || []
+export default function parsePlurals (str: string): PluralTemplate[] {
+    const templates = str.match(/(?:({[^}]*})|(\\\|)|([^|]))+/g) || []
     const len = templates.length
 
     if (len <= 1) return []

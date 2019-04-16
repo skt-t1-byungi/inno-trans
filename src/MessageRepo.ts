@@ -37,10 +37,7 @@ export default class MessageRepo {
 
     public findMessage (locales: string[], key: string) {
         for (const locale of locales) {
-            if (!this.hasMessage(locale)) continue
-
-            const messages = this._repo[locale]
-            if (hasOwn(messages, key)) return messages[key]
+            if (this.hasMessage(locale, key)) return this._repo[locale][key]
         }
 
         return null

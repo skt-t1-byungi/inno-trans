@@ -4,7 +4,7 @@ import { hasOwn } from './util'
 
 // tslint:disable-next-line:cognitive-complexity
 export default function makeFetcher (prefix: string, suffix: string): ValueFetcher {
-    const regex = new RegExp(`\\\\?${escape(prefix)}\\s*([^\\s|]+?)\\s*((?:\\|\\s*[^\\s|]+\\s*)*)${escape(suffix)}`, 'g')
+    const regex = new RegExp(`\\\\?${e(prefix)}\\s*([^\\s|]+?)\\s*((?:\\|\\s*[^\\s|]+\\s*)*)${e(suffix)}`, 'g')
 
     return (template, values, filters, commonFilters) => {
         const replacer = (match: string, key: string, filterStr: string) => {
@@ -12,7 +12,7 @@ export default function makeFetcher (prefix: string, suffix: string): ValueFetch
             if (!hasOwn(values, key)) return ''
 
             const value = commonFilters.length > 0
-                ? reduce(commonFilters, (v, filter) => filter(v), (values[key]))
+                ? reduce(commonFilters, (v, filter) => filter(v), values[key])
                 : values[key]
 
             if (!filterStr) return String(value)
@@ -29,7 +29,7 @@ export default function makeFetcher (prefix: string, suffix: string): ValueFetch
     }
 }
 
-function escape (str: string) {
+function e (str: string) {
     return str.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
 }
 

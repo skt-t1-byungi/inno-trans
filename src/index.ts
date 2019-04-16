@@ -1,7 +1,7 @@
-import find = require('@skt-t1-byungi/array-find')
 import Translator from './Translator'
 import { Formatter, ITranslator, Plugin, TemplateLocaleMap, ValueFilterMap } from './types'
 import { each } from './util'
+import detectLocale from './detectLocale'
 
 interface TranslatorOptions {
     locale: string,
@@ -47,17 +47,4 @@ function InnoTrans ({
 InnoTrans.use = (plugin: Plugin) => {
     registeredPlugins.push(plugin)
     return InnoTrans
-}
-
-function detectLocale (locales: string[]) {
-    let lang: string | void
-    if (process && process.env) {
-        lang = process.env.LC_ALL || process.env.LC_MESSAGES || process.env.LANG || process.env.LANGUAGE
-    } else if (navigator) {
-        lang = navigator.language || (navigator as (Navigator & { userLanguage: string })).userLanguage
-    }
-
-    if (!lang) return 'UNKNOWN'
-
-    return find(locales, str => (lang as string).match(str) !== null) || lang
 }
