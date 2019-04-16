@@ -35,3 +35,25 @@ test('common filter', t => {
     trans.addFilter('*', str => (str as string) + 'abc')
     t.is(trans.trans('test', { a: 'a', b: 'test' }), 'testAabcTESTabc')
 })
+
+test('changeLocale event', t => {
+    const trans = (new Translator()).locale('en')
+    t.plan(2)
+    trans.on('changeLocale', () => t.pass())
+    trans.locale('en')
+    trans.locale('en')
+    trans.locale('ko')
+    trans.locale('ko')
+    trans.locale('en')
+})
+
+test('changeFallbacks event', t => {
+    const trans = (new Translator()).locale('en').fallbacks(['a'])
+    t.plan(2)
+    trans.on('changeFallbacks', () => t.pass())
+    trans.fallbacks('a')
+    trans.fallbacks('a')
+    trans.fallbacks('b')
+    trans.fallbacks(['b'])
+    trans.fallbacks(['a', 'b'])
+})

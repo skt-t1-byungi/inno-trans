@@ -1,4 +1,5 @@
 import reduce = require('@skt-t1-byungi/array-reduce')
+import EventEmitter from '@byungi/event-emitter'
 import makeFetcher from './makeFetcher'
 import MessageRepo from './MessageRepo'
 import {
@@ -18,6 +19,7 @@ export default class Translator implements ITranslator {
     public t: (key: string, values?: ValueMap, opts?: TransOptions) => string
     public tc: (key: string, num: number, values?: ValueMap, opts?: TransOptions) => string
 
+    private _ee = new EventEmitter()
     private _messageRepo = new MessageRepo()
     private _locale!: string
     private _fetcher!: ValueFetcher
@@ -33,6 +35,26 @@ export default class Translator implements ITranslator {
         this.tc = (key, numb, values, opts) => this.transChoice(key, numb, values, opts)
     }
 
+    public on (eventName: string, listener: () => void) {
+        this._ee.on(eventName, listener)
+        return this
+    }
+
+    public once (eventName: string, listener: () => void) {
+        this._ee.once(eventName, listener)
+        return this
+    }
+
+    public off (eventName: string, listener?: () => void) {
+        this._ee.off(eventName, listener)
+        return this
+    }
+
+    public hasEvent (eventName: string, listener?: () => void) {
+        this._ee.has(eventName, listener)
+        return this
+    }
+
     public getAddedLocales () {
         return this._messageRepo.getAddedLocales()
     }
@@ -43,11 +65,13 @@ export default class Translator implements ITranslator {
 
     public removeMessages (locales ?: string | string[]) {
         this._messageRepo.removeMessages(locales)
+        this._ee.emit('removeMessages', locales)
         return this
     }
 
     public addMessages (locale: string, templates: TemplateMap) {
         this._messageRepo.addMessages(locale, templates)
+        this._ee.emit('addMessages', locale)
         return this
     }
 
@@ -55,7 +79,11 @@ export default class Translator implements ITranslator {
     public locale (locale: string): this
     public locale (locale?: string) {
         if (locale === undefined) return this._locale
-        this._locale = locale
+        if (this._locale !== locale) {
+            const oldLocale = this._locale
+            this._locale = locale
+            this._ee.emit('changeLocale', locale, oldLocale)
+        }
         return this
     }
 
@@ -66,12 +94,14 @@ export default class Translator implements ITranslator {
         } else {
             this._filters[name] = filter
         }
+        this._ee.emit('addFilter', name, filter)
         return this
     }
 
     public addFormatter (formatter: Formatter) {
         assertType('formatter', formatter, 'function')
         this._formatters.push(formatter)
+        this._ee.emit('addFormatter', formatter)
         return this
     }
 
@@ -80,7 +110,11 @@ export default class Translator implements ITranslator {
     public fallbacks (fallbacks?: string | string[]) {
         if (fallbacks === undefined) return this._fallbacks
         if (typeof fallbacks === 'string') fallbacks = [fallbacks]
-        this._fallbacks = fallbacks.slice(0)
+        if (!equalFallbacks(this._fallbacks, fallbacks)) {
+            const oldFallbacks = this._fallbacks
+            this._fallbacks = fallbacks.slice(0)
+            this._ee.emit('changeFallbacks', fallbacks, oldFallbacks)
+        }
         return this
     }
 
@@ -88,6 +122,7 @@ export default class Translator implements ITranslator {
         assertType('prefix', prefix, 'string')
         assertType('suffix', suffix, 'string')
         this._fetcher = makeFetcher(prefix, suffix)
+        this._ee.emit('changeTag', [prefix, suffix])
         return this
     }
 
@@ -130,4 +165,12 @@ export default class Translator implements ITranslator {
 
 function escapeFormatter (template: string) {
     return template.replace(/\\([[\]{}|])/g, '$1')
+}
+
+function equalFallbacks (a: string[], b: string[]) {
+    if (a.length !== b.length) return false
+    for (const locale of a) {
+        if (b.indexOf(locale) === -1) return false
+    }
+    return true
 }
