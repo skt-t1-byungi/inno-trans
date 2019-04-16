@@ -1,7 +1,7 @@
 {
     "name": "inno-trans",
     "description": "simple localization library (inspired by laravel translation)",
-    "version": "2.2.0-beta",
+    "version": "2.2.0-beta2",
     "main": "lib/index.js",
     "module": "dist/index.esm.js",
     "unpkg": "dist/index.umd-min.js",
