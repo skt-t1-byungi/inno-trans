@@ -1,8 +1,8 @@
 # inno-trans
 📜 simple localization library (inspired by laravel translation)
 
-[![npm](https://img.shields.io/npm/v/inno-trans.svg?style=flat-square)](https://www.npmjs.com/package/inno-trans)
-[![npm](https://img.shields.io/npm/dt/inno-trans.svg?style=flat-square)](https://www.npmjs.com/package/inno-trans)
+[![npm](https://flat.badgen.net/npm/v/inno-trans)](https://www.npmjs.com/package/inno-trans)
+[![downloads](https://flat.badgen.net/npm/dt/inno-trans)](https://www.npmjs.com/package/inno-trans)
 
 ## Example
 ```js
@@ -24,8 +24,8 @@ yarn add inno-trans
 ```
 ```js
 const InnoTrans = require('inno-trans');
-const t = InnoTrans({...})
 ```
+
 ### browser
 ```html
 <script src="https://unpkg.com/inno-trans"></script>
@@ -33,8 +33,9 @@ const t = InnoTrans({...})
  var t = InnoTrans({...});
 </script>
 ```
+## Features
 
-## Interpolation
+### Interpolation
 You can use a tag(`{}`) to replace a string with a variable.
 ```json
 {
@@ -44,7 +45,7 @@ You can use a tag(`{}`) to replace a string with a variable.
 ```js
 t.trans('welcome', {name: 'john'}) // => welcome, john!
 ```
-### Change Tag
+### Change interpolation tag
 ```json
 {
     "welcome": "welcome, <?=name=>!"
@@ -55,7 +56,7 @@ t.tag(['<?=', '=>'])
 t.trans('welcome', {name: 'john'}) // => welcome, john!
 ```
 
-## Pluralization
+### Pluralization
 You can choose a message that matches the quantity
 ```json
 {
@@ -66,7 +67,7 @@ You can choose a message that matches the quantity
 t.transChoice('apples', 1) // => one apple
 t.transChoice('apples', 2) // => many apples
 ```
-### Complex
+#### Complex pluralization
 ```json
 {
     "apples": "{0}none|[1,19]some|[20,*]many"
@@ -77,19 +78,8 @@ t.transChoice('apples', 0) // => none
 t.transChoice('apples', 10) // => some
 t.transChoice('apples', 20) // => many
 ```
-### with Interpolation
-```json
-{
-    "apples": "{0}none : {count}|[1,19]some : {count}|[20,*]many : {count}"
-}
-```
-```js
-t.transChoice('apples', 0, {count:0}) // => none : 0
-t.transChoice('apples', 10, {count:10}) // => some : 10
-t.transChoice('apples', 20, {count:20}) // => many : 20
-```
 
-## Fallback
+### Fallback
 Fallback a different locale when there is no message.
 ```json
 {
@@ -113,7 +103,7 @@ t.trans('index.hello') // => 안녕~
 t.trans('index.welcome') // => 歓迎よ~
 ```
 
-## Filter
+### Filter
 You can write in the message a filter that converts the value.
 ```json
 {
@@ -129,7 +119,7 @@ t.trans('welcome', {name: 'John'}) // => welcome JOHN!
 t.trans('hello', {name: 'John'}) // => hello john!
 ```
 
-## Formatter
+### Formatter
 Converts interpolated messages. `values` used for interpolation, and `locale` where messages are located. This is useful when writing plugins.
 
 ```json
