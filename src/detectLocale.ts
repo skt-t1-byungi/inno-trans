@@ -8,7 +8,7 @@ export default function detectLocale (locales: string[]) {
         lang = navigator.language || (navigator as (Navigator & { userLanguage: string })).userLanguage
     }
 
-    if (!lang) return 'UNKNOWN'
+    if (!lang) return 'unknown'
 
     return find(locales, str => (lang as string).match(str) !== null) || lang
 }
