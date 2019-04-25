@@ -36,7 +36,8 @@ const InnoTrans = require('inno-trans');
 ## Features
 
 ### Interpolation
-You can use a tag(`{}`) to replace a string with a variable.
+Interpolate using tag(`{}`).
+
 ```json
 {
     "welcome": "welcome, {name}!"
@@ -45,7 +46,10 @@ You can use a tag(`{}`) to replace a string with a variable.
 ```js
 t.trans('welcome', {name: 'john'}) // => welcome, john!
 ```
+
 ### Change interpolation tag
+Change the interpolation tag bracket.
+
 ```json
 {
     "welcome": "welcome, <?=name=>!"
@@ -57,7 +61,8 @@ t.trans('welcome', {name: 'john'}) // => welcome, john!
 ```
 
 ### Pluralization
-You can choose a message that matches the quantity
+Choose a message that matches the quantity.
+
 ```json
 {
     "apples": "one apple|many apples"
@@ -68,6 +73,8 @@ t.transChoice('apples', 1) // => one apple
 t.transChoice('apples', 2) // => many apples
 ```
 #### Complex pluralization
+Multiple quantity conditions can be used.
+
 ```json
 {
     "apples": "{0}none|[1,19]some|[20,*]many"
@@ -80,7 +87,8 @@ t.transChoice('apples', 20) // => many
 ```
 
 ### Fallback
-Fallback a different locale when there is no message.
+Fallback a another locale when there is no message.
+
 ```json
 {
     "en": {},
@@ -104,7 +112,8 @@ t.trans('index.welcome') // => 歓迎よ~
 ```
 
 ### Filter
-You can write in the message a filter that converts the value.
+You can write a filter to convert the value to a message.
+
 ```json
 {
     "welcome": "welcome, {name|upper}!",
