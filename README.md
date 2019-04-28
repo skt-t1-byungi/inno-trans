@@ -36,24 +36,34 @@ const InnoTrans = require('inno-trans');
 ## Features
 
 ### Interpolation
-Interpolate using tag(`{}`).
+Interpolate using tag(`{`,`}`).
 
-```json
-{
-    "welcome": "welcome, {name}!"
-}
+```js
+const t = InnoTrans({
+    locale: 'en',
+    message: {
+        en: {
+            welcome: 'welcome, {name}!'
+        }
+    }
+})
 ```
 ```js
 t.trans('welcome', {name: 'john'}) // => welcome, john!
 ```
 
-### Change interpolation tag
+#### Change interpolation tag
 Change the interpolation tag bracket.
 
-```json
-{
-    "welcome": "welcome, <?=name=>!"
-}
+```js
+const t = InnoTrans({
+    locale: 'en',
+    message: {
+        en: {
+            welcome: 'welcome, <?=name=>!'
+        }
+    }
+})
 ```
 ```js
 t.tag(['<?=', '=>'])
@@ -63,10 +73,15 @@ t.trans('welcome', {name: 'john'}) // => welcome, john!
 ### Pluralization
 Choose a message that matches the quantity.
 
-```json
-{
-    "apples": "one apple|many apples"
-}
+```js
+const t = InnoTrans({
+    locale: 'en',
+    message: {
+        en: {
+            apples: 'one apple|many apples'
+        }
+    }
+})
 ```
 ```js
 t.transChoice('apples', 1) // => one apple
@@ -75,10 +90,15 @@ t.transChoice('apples', 2) // => many apples
 #### Complex pluralization
 Multiple quantity conditions can be used.
 
-```json
-{
-    "apples": "{0}none|[1,19]some|[20,*]many"
-}
+```js
+const t = InnoTrans({
+    locale: 'en',
+    message: {
+        en: {
+            apples: '{0}none|[1,19]some|[20,*]many'
+        }
+    }
+})
 ```
 ```js
 t.transChoice('apples', 0) // => none
@@ -89,17 +109,20 @@ t.transChoice('apples', 20) // => many
 ### Fallback
 Fallback a another locale when there is no message.
 
-```json
-{
-    "en": {},
-    "ko": {
-        "index.hello": "안녕~"
-    },
-    "ja": {
-        "index.hello": "こんにちは~",
-        "index.welcome": "歓迎よ~"
+```js
+const t = InnoTrans({
+    locale: 'en',
+    message: {
+        en: {},
+        ko: {
+            'index.hello': '안녕~'
+        },
+        ja: {
+            'index.hello': 'こんにちは~',
+            'index.welcome': '歓迎よ~'
+        }
     }
-}
+})
 ```
 ```js
 t.trans('index.hello') // => index.hello
@@ -112,13 +135,18 @@ t.trans('index.welcome') // => 歓迎よ~
 ```
 
 ### Filter
-You can write a filter to convert the value to a message.
+You can write a filter to convert the Interpolation variable.
 
-```json
-{
-    "welcome": "welcome, {name|upper}!",
-    "hello": "hello, {name|lower}!"
-}
+```js
+const t = InnoTrans({
+    locale: 'en',
+    message: {
+        en: {
+            welcome: 'welcome, {name|upper}!',
+            hello: 'hello, {name|lower}!'
+        }
+    }
+})
 ```
 ```js
 t.addFilter('upper', str => str.toUpperCase())
@@ -127,32 +155,110 @@ t.addFilter('lower', str => str.toLowerCase())
 t.trans('welcome', {name: 'John'}) // => welcome JOHN!
 t.trans('hello', {name: 'John'}) // => hello john!
 ```
+#### Common filter
+Wildcards (`*`) can be used to create filter that are commonly applied.
 
-### Formatter
-Converts interpolated messages. `values` used for interpolation, and `locale` where messages are located. This is useful when writing plugins.
-
-```json
-{
-    "welcome": "<p>welcome, {name}!</p>",
-    "hello": "<span>hello, {name}!</span>"
-}
+```js
+const t = InnoTrans({
+    locale: 'en',
+    message: {
+        en: {
+            abc: 'ab {0} {1}'
+        }
+    }
+})
 ```
 ```js
-const toRedText = (str, values, locale) => str.replace(/<(\S+)>(.*?)<\/\1>/, '<$1 style="color:red">$2</$1>')
-t.addFormatter(toRedText)
+t.addFilter('*', str => str.toUpperCase())
+t.trans('abc', {0: 'cd', 1: 'ef') // => ab CD EF
+```
+
+### Formatter
+Converts interpolated messages.
+
+```js
+const t = InnoTrans({
+    locale: 'en',
+    message: {
+        en: {
+            welcome: 'welcome, {name}!',
+        }
+    }
+})
+```
+```js
+t.addFormatter((str, values, locale)=> {
+    console.log(`str: ${str}, values: ${JSON.stringify(values)}, locale: ${locale}`)
+    return '<p>' + str + '</p>'
+})
 
 t.trans('welcome', {name: 'john'})
-// => <p style="color:red">welcome, john!</p>
-t.trans('hello', {name: 'john'})
-// => <div style="color:red">hello, john!</div>
+// str: welcome, john!, values: {"name":"john"}, locale: en
+// => <p>welcome, john!</p>
+```
+
+### Event handling.
+Handles events where messages can change.
+
+```js
+const t = InnoTrans({
+    locale: 'en',
+    message: {
+        en: {
+            welcome: 'welcome, {name}!',
+        },
+        ko: {
+            welcome: '안녕, {name}!',
+        }
+    }
+})
+
+t.trans('welcome', {name: 'john'}) // => welcome, john!
+
+t.on('changeLocale', locale => {
+    console.log(locale) // => ko
+    t.trans('welcome', {name: 'john'}) // => 안녕, john!
+})
+
+t.locale('ko')
+```
+
+#### events
+- `changeLocale`
+- `changeFallbacks`
+- `changeTag`
+- `addMessages`
+- `removeMessages`
+- `addFilter`
+- `removeFilter`
+- `addFormatter`
+- `removeFormatter`
+
+#### global event
+You can handle all events with a wildcard.
+
+```js
+t.on('*', (eventName, ...params) => {
+    console.log(eventName, params)
+})
+
+t.locale('ko') // => changeLocale, ["ko"]
+t.fallbacks(['ja', 'en']) // => changeFallbacks, [["ja", "en"]]
+t.tag(['<?=', '=>']) // => changeTag, ["<?=", "=>"]
+t.addMessages('en', {}) // => addMessages, ["en"]
+t.removeMessages('en', 'welcome') // => removeMessages, ["en", "welcome"]
+t.addFilter('upper', strUpperFunction) // => addFilter, ["upper", strUpperFunction]
+t.removeFilter('upper') // => removeFilter, ["upper"]
+t.addFormatter(htmlFormatter) // => addFormatter, [htmlFormatter]
+t.removeFormatter(htmlFormatter) // => removeFormatter, []
 ```
 
 ## API
-### trans(options)
+### InnoTrans(options)
 Create InnoTrans instance.
 
 ```js
-trans({
+const t = InnoTrans({
     locale: 'en',
     fallbacks: ['ko', 'ja'],
     messages: {
@@ -256,13 +362,12 @@ t.addMessages('en', {
 })
 ```
 
-### t.removeMessages([locales])
-Remove messages. If no `locales` argument, remove all.
+### t.removeMessages(locale[, key])
+Remove messages. If no `key` argument, remove all messages in the locale.
 
 ```js
+t.removeMessages('en', 'welcome')
 t.removeMessages('en')
-t.removeMessages(['ko', 'ja'])
-t.removeMessages() // Warning! Remove all.
 ```
 
 ### t.getAddedLocales()
@@ -297,8 +402,14 @@ t.tag(['<?=', '=>'])
 ### t.addFilter(name, filter)
 Add a filter function.
 
+### t.removeFilter(name[, filter])
+Remove a filter function.
+
 ### t.addFormatter(formatter)
 Add a formatter function.
+
+### t.removeFormatter(formatter)
+Remove a formatter function.
 
 ### t.use(plugin)
 Add a plugin.
