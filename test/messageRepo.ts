@@ -37,16 +37,11 @@ test('removeMessages - string', t => {
     t.deepEqual(repo.getAddedLocales(), ['en'])
 })
 
-test('removeMessages - string[]', t => {
+test('removeMessages - key', t => {
     const repo = removeStub()
-    repo.removeMessages(['ko', 'en'])
-    t.deepEqual(repo.getAddedLocales(), [])
-})
-
-test('removeMessages - all', t => {
-    const repo = removeStub()
-    repo.removeMessages()
-    t.deepEqual(repo.getAddedLocales(), [])
+    t.true(repo.hasMessage('ko', 'a'))
+    repo.removeMessages('ko', 'a')
+    t.false(repo.hasMessage('ko', 'a'))
 })
 
 const findStub = () => {

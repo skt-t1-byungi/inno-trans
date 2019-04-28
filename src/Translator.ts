@@ -59,7 +59,7 @@ export default class Translator implements ITranslator {
 
     private _emit (eventName: Exclude<EventName, '*'>, ...params: any[]) {
         this._emitter.emit(eventName, ...params)
-        this._emitter.emit('*', ...params)
+        this._emitter.emit('*', eventName, ...params)
     }
 
     public getAddedLocales () {
@@ -70,9 +70,8 @@ export default class Translator implements ITranslator {
         return this._messageRepo.hasMessage(locale, key)
     }
 
-    public removeMessages (locales ?: string | string[]) {
-        this._messageRepo.removeMessages(locales)
-        this._emit('removeMessages', locales)
+    public removeMessages (locale: string, key?: string) {
+        if (this._messageRepo.removeMessages(locale, key)) this._emit('removeMessages', locale, key)
         return this
     }
 
@@ -86,11 +85,7 @@ export default class Translator implements ITranslator {
     public locale (locale: string): this
     public locale (locale?: string) {
         if (locale === undefined) return this._locale
-        if (this._locale !== locale) {
-            const oldLocale = this._locale
-            this._locale = locale
-            this._emit('changeLocale', locale, oldLocale)
-        }
+        if (this._locale !== locale) this._emit('changeLocale', this._locale = locale)
         return this
     }
 
@@ -117,11 +112,7 @@ export default class Translator implements ITranslator {
     public fallbacks (fallbacks?: string | string[]) {
         if (fallbacks === undefined) return this._fallbacks
         if (typeof fallbacks === 'string') fallbacks = [fallbacks]
-        if (!equalFallbacks(this._fallbacks, fallbacks)) {
-            const oldFallbacks = this._fallbacks
-            this._fallbacks = fallbacks.slice(0)
-            this._emit('changeFallbacks', fallbacks, oldFallbacks)
-        }
+        if (!equalFallbacks(this._fallbacks, fallbacks)) this._emit('changeFallbacks', this._fallbacks = fallbacks.slice())
         return this
     }
 

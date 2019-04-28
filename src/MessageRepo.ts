@@ -19,14 +19,14 @@ export default class MessageRepo {
         return locales
     }
 
-    public removeMessages (locales?: string | string[]) {
-        if (locales === undefined) {
-            this._repo = {}
-            return
+    public removeMessages (locale: string, key?: string) {
+        if (!this.hasMessage(locale, key)) return false
+        if (key === undefined) {
+            delete this._repo[locale]
+        } else {
+            delete this._repo[locale][key]
         }
-
-        if (typeof locales === 'string') locales = [locales]
-        for (const locale of locales) delete this._repo[locale]
+        return true
     }
 
     public hasMessage (locale: string, key?: string) {
@@ -39,7 +39,6 @@ export default class MessageRepo {
         for (const locale of locales) {
             if (this.hasMessage(locale, key)) return this._repo[locale][key]
         }
-
         return null
     }
 }
