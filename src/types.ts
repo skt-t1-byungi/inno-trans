@@ -3,7 +3,7 @@ import Message from './Message'
 interface Mappable<V> {[name: string]: V}
 
 export type EventName =
-    'changeLocale' | 'changeFallbacks' | 'changeTag' | 'addMessages' | 'removeMessages' | 'addFilter' | 'addFormatter'
+    'changeLocale' | 'changeFallbacks' | 'changeTag' | 'addMessages' | 'removeMessages' | 'addFilter' | 'addFormatter' | '*'
 export type EventListener = (...params: any[]) => void
 
 export type ValueMap = Mappable<any>

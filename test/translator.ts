@@ -58,7 +58,17 @@ test('changeFallbacks event', t => {
     trans.fallbacks(['a', 'b'])
 })
 
-test('Other types of default', t => {
+test('global event', t => {
+    const trans = (new Translator()).locale('en').fallbacks(['a'])
+    t.plan(4)
+    trans.on('*', () => t.pass())
+    trans.locale('ko')
+    trans.locale('en')
+    trans.fallbacks('b')
+    trans.fallbacks('a')
+})
+
+test('Allow multiple types by default.', t => {
     const trans = new Translator()
     const obj = {}
     t.is(trans.t('test', undefined, { defaults: obj }), obj)

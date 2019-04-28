@@ -57,6 +57,11 @@ export default class Translator implements ITranslator {
         return this
     }
 
+    private _emit (eventName: Exclude<EventName, '*'>, ...params: any[]) {
+        this._emitter.emit(eventName, ...params)
+        this._emitter.emit('*', ...params)
+    }
+
     public getAddedLocales () {
         return this._messageRepo.getAddedLocales()
     }
@@ -67,13 +72,13 @@ export default class Translator implements ITranslator {
 
     public removeMessages (locales ?: string | string[]) {
         this._messageRepo.removeMessages(locales)
-        this._emitter.emit('removeMessages', locales)
+        this._emit('removeMessages', locales)
         return this
     }
 
     public addMessages (locale: string, templates: TemplateMap) {
         this._messageRepo.addMessages(locale, templates)
-        this._emitter.emit('addMessages', locale)
+        this._emit('addMessages', locale)
         return this
     }
 
@@ -84,7 +89,7 @@ export default class Translator implements ITranslator {
         if (this._locale !== locale) {
             const oldLocale = this._locale
             this._locale = locale
-            this._emitter.emit('changeLocale', locale, oldLocale)
+            this._emit('changeLocale', locale, oldLocale)
         }
         return this
     }
@@ -96,14 +101,14 @@ export default class Translator implements ITranslator {
         } else {
             this._filters[name] = filter
         }
-        this._emitter.emit('addFilter', name, filter)
+        this._emit('addFilter', name, filter)
         return this
     }
 
     public addFormatter (formatter: Formatter) {
         assertType('formatter', formatter, 'function')
         this._formatters.push(formatter)
-        this._emitter.emit('addFormatter', formatter)
+        this._emit('addFormatter', formatter)
         return this
     }
 
@@ -115,7 +120,7 @@ export default class Translator implements ITranslator {
         if (!equalFallbacks(this._fallbacks, fallbacks)) {
             const oldFallbacks = this._fallbacks
             this._fallbacks = fallbacks.slice(0)
-            this._emitter.emit('changeFallbacks', fallbacks, oldFallbacks)
+            this._emit('changeFallbacks', fallbacks, oldFallbacks)
         }
         return this
     }
@@ -124,7 +129,7 @@ export default class Translator implements ITranslator {
         assertType('prefix', prefix, 'string')
         assertType('suffix', suffix, 'string')
         this._fetcher = makeFetcher(prefix, suffix)
-        this._emitter.emit('changeTag', [prefix, suffix])
+        this._emit('changeTag', [prefix, suffix])
         return this
     }
 

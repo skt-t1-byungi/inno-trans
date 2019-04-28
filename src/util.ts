@@ -9,6 +9,7 @@ export function each<T extends object> (o: T, fn: (v: T[keyof T], k: Extract<key
 }
 
 export function getProp<T extends object,K extends (keyof T & string), F> (o: T, k: K, defaults: F) {
+    // tslint:disable-next-line: strict-type-predicates no-useless-cast
     if (hasOwn(o, k) && o[k] !== undefined) return o[k]!
     return defaults
 }
