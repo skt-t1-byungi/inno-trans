@@ -1,4 +1,5 @@
 import reduce = require('@skt-t1-byungi/array-reduce')
+import filter = require('@skt-t1-byungi/array-filter')
 import EventEmitter from '@byungi/event-emitter'
 import makeFetcher from './makeFetcher'
 import MessageRepo from './MessageRepo'
@@ -96,14 +97,38 @@ export default class Translator implements ITranslator {
         } else {
             this._filters[name] = filter
         }
-        this._emit('addFilter', name, filter)
+        this._emit('addFilter', name)
+        return this
+    }
+
+    public removeFilter (name: string, fn?: ValueFilter) {
+        if (name === '*' && this._commonFilters.length > 0) {
+            if (fn) {
+                assertType('filter', fn, 'function')
+                this._commonFilters = filter(this._commonFilters, v => v !== fn)
+            } else {
+                this._commonFilters = []
+            }
+            this._emit('removeFilter', '*')
+        } else if (this._filters[name]) {
+            delete this._filters[name]
+            this._emit('removeFilter', name)
+        }
+
         return this
     }
 
     public addFormatter (formatter: Formatter) {
         assertType('formatter', formatter, 'function')
         this._formatters.push(formatter)
-        this._emit('addFormatter', formatter)
+        this._emit('addFormatter')
+        return this
+    }
+
+    public removeFormatter (formatter: Formatter) {
+        assertType('formatter', formatter, 'function')
+        this._formatters = filter(this._formatters, v => v !== formatter)
+        this._emit('removeFormatter')
         return this
     }
 

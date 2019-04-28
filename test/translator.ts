@@ -13,20 +13,23 @@ test('If no message, return key', t => {
     t.is(trans.t('test', undefined, { defaults: '' }), '')
 })
 
-test('formatter', t => {
+test('add formatter, remove formatter', t => {
     let captureValue: any
     let captureLocale: any
 
-    const trans = make({ test: 'test' })
-        .addFormatter((str, value, locale) => {
-            captureValue = value
-            captureLocale = locale
-            return '!!' + str + '!!'
-        })
+    const formatter = (str: string, value: any, locale: string) => {
+        captureValue = value
+        captureLocale = locale
+        return '!!' + str + '!!'
+    }
+    const trans = make({ test: 'test' }).addFormatter(formatter)
 
     t.is(trans.trans('test', { a: 'test' }), '!!test!!')
     t.deepEqual(captureValue, { a: 'test' })
     t.is(captureLocale, 'en')
+
+    trans.removeFormatter(formatter)
+    t.is(trans.trans('test', { a: 'test' }), 'test')
 })
 
 test('common filter', t => {
@@ -34,6 +37,23 @@ test('common filter', t => {
     t.is(trans.trans('test', { a: 'a', b: 'test' }), 'testATEST')
     trans.addFilter('*', str => (str as string) + 'abc')
     t.is(trans.trans('test', { a: 'a', b: 'test' }), 'testAabcTESTabc')
+})
+
+test('remove filter', t => {
+    const upper = (str: string) => str.toUpperCase()
+    const trans = make({ test: '{a|upper}' }).addFilter('upper', upper)
+    t.is(trans.trans('test', { a: 'abc' }), 'ABC')
+    trans.removeFilter('upper')
+    t.is(trans.trans('test', { a: 'abc' }), 'abc')
+    trans.addFilter('*', upper)
+    t.is(trans.trans('test', { a: 'abc' }), 'ABC')
+    trans.removeFilter('*')
+    t.is(trans.trans('test', { a: 'abc' }), 'abc')
+    trans.addFilter('*', upper)
+    trans.removeFilter('*', () => '') // dummy
+    t.is(trans.trans('test', { a: 'abc' }), 'ABC')
+    trans.removeFilter('*', upper)
+    t.is(trans.trans('test', { a: 'abc' }), 'abc')
 })
 
 test('changeLocale event', t => {
