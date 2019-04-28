@@ -97,7 +97,7 @@ export default class Translator implements ITranslator {
         } else {
             this._filters[name] = filter
         }
-        this._emit('addFilter', name)
+        this._emit('addFilter', name, filter)
         return this
     }
 
@@ -121,7 +121,7 @@ export default class Translator implements ITranslator {
     public addFormatter (formatter: Formatter) {
         assertType('formatter', formatter, 'function')
         this._formatters.push(formatter)
-        this._emit('addFormatter')
+        this._emit('addFormatter', formatter)
         return this
     }
 
