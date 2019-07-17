@@ -3,7 +3,7 @@
     "description": "simple localization library (inspired by laravel translation)",
     "version": "2.2.0-beta3",
     "main": "lib/index.js",
-    "unpkg": "dist/index.umd.js",
+    "unpkg": "dist/index.umd.min.js",
     "types": "lib/index.d.ts",
     "author": {
         "name": "skt-t1-byungi",
@@ -29,7 +29,7 @@
         "test": "ava",
         "prepublishOnly": "npm run build",
         "clean": "rm -rf dist/ lib/ ",
-        "build": "npm run clean && tsc & bili lib/index.js --format umd --module-name InnoTrans --bundle-node-modules"
+        "build": "npm run clean && tsc & bili lib/index.js --format umd-min --module-name InnoTrans --bundle-node-modules"
     },
     "devDependencies": {
         "@types/node": "^12.6.6",
