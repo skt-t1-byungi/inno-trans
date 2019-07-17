@@ -32,16 +32,16 @@
         "build": "npm run clean && tsc & bili lib/index.js --format umd --module-name InnoTrans --bundle-node-modules"
     },
     "devDependencies": {
-        "@types/node": "^11.13.8",
-        "ava": "^1.0.1",
-        "bili": "^4.7.3",
-        "ts-node": "^8.1.0",
-        "tslint": "^5.16.0",
+        "@types/node": "^12.6.6",
+        "ava": "^2.2.0",
+        "bili": "^4.8.0",
+        "ts-node": "^8.3.0",
+        "tslint": "^5.18.0",
         "tslint-config-byungi": "^0.1.1",
-        "typescript": "^3.4.5"
+        "typescript": "^3.5.3"
     },
     "dependencies": {
-        "@byungi/event-emitter": "^1.0.5",
+        "@byungi/event-emitter": "^1.1.0",
         "@skt-t1-byungi/array-filter": "^0.2.0",
         "@skt-t1-byungi/array-find": "^0.2.0",
         "@skt-t1-byungi/array-map": "^0.2.0",
