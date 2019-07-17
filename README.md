@@ -384,9 +384,5 @@ Remove a formatter function.
 ### t.use(plugin)
 Add a plugin.
 
-## Plugins
-- [inno-trans-korean-josa-plugin](https://github.com/skt-t1-byungi/inno-trans-korean-josa-plugin)
-- [inno-trans-react-element-plugin](https://github.com/skt-t1-byungi/inno-trans-react-element-plugin)
-
 ## License
 MIT
