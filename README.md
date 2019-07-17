@@ -36,8 +36,7 @@ const InnoTrans = require('inno-trans');
 ## Features
 
 ### Interpolation
-Interpolate using tag(`{`,`}`).
-
+Interpolate using tag bracket (`{}`).
 ```js
 const t = InnoTrans({
     locale: 'en',
@@ -52,8 +51,7 @@ const t = InnoTrans({
 t.trans('welcome', {name: 'john'}) // => welcome, john!
 ```
 
-#### Change interpolation tag
-Change the interpolation tag bracket.
+#### Change interpolation tag bracket.
 
 ```js
 const t = InnoTrans({
@@ -88,7 +86,6 @@ t.transChoice('apples', 1) // => one apple
 t.transChoice('apples', 2) // => many apples
 ```
 #### Complex pluralization
-Multiple quantity conditions can be used.
 
 ```js
 const t = InnoTrans({
@@ -135,7 +132,7 @@ t.trans('index.welcome') // => 歓迎よ~
 ```
 
 ### Filter
-You can write a filter to convert the Interpolation variable.
+Converts interpolation values.
 
 ```js
 const t = InnoTrans({
@@ -155,9 +152,8 @@ t.addFilter('lower', str => str.toLowerCase())
 t.trans('welcome', {name: 'John'}) // => welcome JOHN!
 t.trans('hello', {name: 'John'}) // => hello john!
 ```
-#### Common filter
-Wildcards (`*`) can be used to create filter that are commonly applied.
 
+#### Common filter
 ```js
 const t = InnoTrans({
     locale: 'en',
@@ -197,8 +193,7 @@ t.trans('welcome', {name: 'john'})
 // => <p>welcome, john!</p>
 ```
 
-### Event handling.
-Handles events where messages can change.
+### Event
 
 ```js
 const t = InnoTrans({
@@ -215,8 +210,7 @@ const t = InnoTrans({
 
 t.trans('welcome', {name: 'john'}) // => welcome, john!
 
-t.on('changeLocale', locale => {
-    console.log(locale) // => ko
+t.on('changeLocale', () => {
     t.trans('welcome', {name: 'john'}) // => 안녕, john!
 })
 
@@ -233,25 +227,7 @@ t.locale('ko')
 - `removeFilter`
 - `addFormatter`
 - `removeFormatter`
-
-#### global event
-You can handle all events with a wildcard.
-
-```js
-t.on('*', (eventName, ...params) => {
-    console.log(eventName, params)
-})
-
-t.locale('ko') // => changeLocale, ["ko"]
-t.fallbacks(['ja', 'en']) // => changeFallbacks, [["ja", "en"]]
-t.tag(['<?=', '=>']) // => changeTag, ["<?=", "=>"]
-t.addMessages('en', {}) // => addMessages, ["en"]
-t.removeMessages('en', 'welcome') // => removeMessages, ["en", "welcome"]
-t.addFilter('upper', strUpperFunction) // => addFilter, ["upper", strUpperFunction]
-t.removeFilter('upper') // => removeFilter, ["upper"]
-t.addFormatter(htmlFormatter) // => addFormatter, [htmlFormatter]
-t.removeFormatter(htmlFormatter) // => removeFormatter, []
-```
+- `*` - Global event.
 
 ## API
 ### InnoTrans(options)
@@ -284,20 +260,20 @@ const t = InnoTrans({
 ```
 
 #### options
-- `locale` - Specifies locale. If not specified, it is automatically inferred. `UNKNOWN` is specified when inferring fails.
-- `fallbacks` - Specifies another locale to look for messages that are not in the current locale.
+- `locale` - Specifies current locale. If not, it is automatically inferred.
+- `fallbacks` - Specifies another locales to fallback.
 - `messages` - Message resources.
-- `tag` - Prefix and suffix for interpolation. Default `{}`.
+- `tag` - Prefix and suffix for interpolation. Default `{`,`}`.
 - `filters` - Function for converting interpolation values.
 - `formatters` - Function for converting interpolated message.
-- `plugins` - Plugin to use with.
+- `plugins` - Plugin to use.
 
 ### t.trans(key [, values [, options]])
 Returns a message that matches the key.
 
 #### options
 - `locale` - Specifies the locale. The current locale is ignored.
-- `defaults` - String to return when the message does not exist. If not, a key is returned.
+- `defaults` - String to return instead of the key when a message does not exist.
 
 ```js
 const t = InnoTrans({
@@ -314,7 +290,7 @@ t.trans('hello') // => hello!
 t.trans('hello', undefined, {locale: 'ko'}) // => 안녕
 ```
 
-Supports short method name.
+#### Short method
 
 ```js
 t.t('hello', {name: 'john'})
@@ -330,14 +306,12 @@ t.transChoice('bought', 1) // => I bought one
 t.transChoice('bought', 10) // => I bought many things!
 ```
 
-Supports short method name.
-
+#### Short mehotd
 ```js
 t.tc('apples', 3, {count: 3});
 ```
 
 ### t.locale([locale])
-If the `locale` argument exists, set a new locale. If not, it returns current locale.
 
 ```js
 t.locale('ko') // Change locale to "ko".
@@ -345,15 +319,13 @@ t.locale() // => 'ko'
 ```
 
 ### t.fallbacks([fallbacks])
-If the `fallbacks` argument exists, set a new fallbacks. If not, it returns current fallbacks.
 
 ```js
-t.fallbacks(['ko', 'ja']) // Change fallback locale to "ko" and "ja".
+t.fallbacks(['ko', 'ja'])
 t.fallbacks() // => ['ko', 'ja']
 ```
 
 ### t.addMessages(locale, messages)
-Add messages.
 
 ```js
 t.addMessages('en', {
@@ -363,7 +335,7 @@ t.addMessages('en', {
 ```
 
 ### t.removeMessages(locale[, key])
-Remove messages. If no `key` argument, remove all messages in the locale.
+If no `key` argument, remove all messages in the locale.
 
 ```js
 t.removeMessages('en', 'welcome')
@@ -380,8 +352,6 @@ t.getAddedLocales() // => ['ko', 'ja']
 ```
 
 ### t.hasMessage(locale [, key])
-Returns true if the message exists.
-
 ```js
 t.hasMessage('ko') // => false
 
