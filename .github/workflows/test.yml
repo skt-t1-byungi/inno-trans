@@ -1,0 +1,16 @@
+name: Test
+on: [push]
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                node-version: [8.x, 10.x, 12.x]
+
+        steps:
+            -   uses: actions/checkout@v1
+            -   name: setup node ${{ matrix.node-version }}
+                with:
+                    node-version: ${{ matrix.node-version }}
+            -   run : npm install && npm run build
+            -   run : npm run test
