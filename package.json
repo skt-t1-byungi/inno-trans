@@ -29,7 +29,7 @@
         "test": "ava",
         "prepublishOnly": "npm run build",
         "clean": "rm -rf dist/ lib/ ",
-        "build": "npm run clean && tsc & bili lib/index.js --format umd-min --module-name InnoTrans --bundle-node-modules"
+        "build": "npm run clean && tsc && bili lib/index.js --format umd-min --module-name InnoTrans --bundle-node-modules"
     },
     "devDependencies": {
         "@types/node": "^12.6.6",
