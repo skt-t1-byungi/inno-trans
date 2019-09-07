@@ -384,5 +384,8 @@ Remove a formatter function.
 ### t.use(plugin)
 Add a plugin.
 
+## Plugins
+- [inno-trans-react-plugin](https://github.com/skt-t1-byungi/inno-trans-react-plugin) - A inno-trans plugin for react.
+
 ## License
 MIT
